@@ -1,7 +1,6 @@
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.prebuilt import create_react_agent
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from tools.quotation_db_tool import search_quotation_details
 from tools.policy_rag_tool import search_policy_documents
@@ -37,19 +36,10 @@ def create_agent_executor() -> create_react_agent:
         temperature=0.2,
     )
 
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", SYSTEM_PROMPT),
-            MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{input}"),
-            MessagesPlaceholder(variable_name="agent_scratchpad"),
-        ]
-    )
-
     agent_executor = create_react_agent(
         llm, 
         tools=tools, 
-        state_modifier=SYSTEM_PROMPT
+        prompt=SYSTEM_PROMPT
     )
     
     return agent_executor

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 import uuid
 
+from langchain_core.messages import HumanMessage
 from database import get_supabase_client
 from agent import create_agent_executor, build_chat_history, build_human_input
 
@@ -79,14 +80,12 @@ async def chat(request: ChatRequest):
         human_input = build_human_input(request.message, request.image_base64)
 
         agent_executor: object = app.state.agent_executor
-        result = await agent_executor.ainvoke(
-            {
-                "input": human_input,
-                "chat_history": chat_history,
-            }
-        )
 
-        ai_reply: str = result.get("output", "")
+        messages = chat_history + [HumanMessage(content=human_input)]
+        result = await agent_executor.ainvoke({"messages": messages})
+
+        last_message = result["messages"][-1]
+        ai_reply: str = last_message.content if hasattr(last_message, "content") else str(last_message)
 
         _save_message(request.session_id, "user", request.message)
         _save_message(request.session_id, "ai", ai_reply)
