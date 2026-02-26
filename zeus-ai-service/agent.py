@@ -1,6 +1,6 @@
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langgraph.prebuilt import create_react_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from tools.quotation_db_tool import search_quotation_details
@@ -30,12 +30,11 @@ Your workflow when helping a user:
 tools = [search_quotation_details, search_policy_documents]
 
 
-def create_agent_executor() -> AgentExecutor:
+def create_agent_executor() -> create_react_agent:
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         google_api_key=os.environ["GEMINI_API_KEY"],
         temperature=0.2,
-        convert_system_message_to_human=False,
     )
 
     prompt = ChatPromptTemplate.from_messages(
@@ -47,16 +46,13 @@ def create_agent_executor() -> AgentExecutor:
         ]
     )
 
-    agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
-
-    return AgentExecutor(
-        agent=agent,
-        tools=tools,
-        verbose=True,
-        max_iterations=8,
-        handle_parsing_errors=True,
-        return_intermediate_steps=False,
+    agent_executor = create_react_agent(
+        llm, 
+        tools=tools, 
+        state_modifier=SYSTEM_PROMPT
     )
+    
+    return agent_executor
 
 
 def build_chat_history(raw_history: list[dict]) -> list:
