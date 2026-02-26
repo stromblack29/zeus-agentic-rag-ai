@@ -1,74 +1,102 @@
+import re
 import json
 from typing import Optional
 from langchain_core.tools import tool
 from database import get_supabase_client
 
+
+def _clean_sub_model(sub_model: str) -> str:
+    """Remove trailing year (4-digit number) accidentally included in sub_model by the LLM."""
+    return re.sub(r'\b(19|20)\d{2}\b', '', sub_model).strip().strip('-').strip()
+
+
 @tool
-def search_quotation_details(brand: Optional[str] = None, model: Optional[str] = None, sub_model: Optional[str] = None, year: Optional[int] = None) -> str:
+def search_quotation_details(
+    brand: Optional[str] = None,
+    model: Optional[str] = None,
+    sub_model: Optional[str] = None,
+    year: Optional[int] = None,
+) -> str:
     """
     Search the vw_quotation_details view for vehicle information and insurance premiums.
-    Returns brand, model, sub_model, year, car_estimated_price, plan_type, plan_name, 
+    Returns brand, model, sub_model, year, car_estimated_price, plan_type, plan_name,
     insurer_name, base_premium, and deductible.
-    
-    Use this tool whenever the user mentions a car brand, model name, or sub-model
-    to retrieve the exact insurance quotation data. Extract the specific parts of the car name into the arguments.
+
+    Use this tool whenever the user mentions a car brand, model name, or sub-model.
+    IMPORTANT: Split the car name into separate arguments.
+    Example: "Honda Civic e:HEV RS 2024" → brand="Honda", model="Civic", sub_model="e:HEV RS", year=2024
+    Do NOT put the year inside sub_model.
 
     Args:
-        brand: The car brand (e.g., "Honda", "Toyota").
-        model: The car model (e.g., "Civic", "Tank", "D-Max").
-        sub_model: The car sub-model or trim (e.g., "Type R", "e:HEV RS", "300 Hi-Torq"). Do NOT include the year in this field.
-        year: The manufacturing year of the car (e.g., 2024).
+        brand: The car brand only (e.g., "Honda", "Toyota", "BMW").
+        model: The car model only (e.g., "Civic", "Camry", "Tank"). Do NOT include brand here.
+        sub_model: The trim/sub-model only (e.g., "Type R", "e:HEV RS", "Hybrid Premium"). Do NOT include year here.
+        year: The manufacturing year as an integer (e.g., 2024).
     """
-    if not brand and not model and not sub_model and not year:
+    if not any([brand, model, sub_model, year]):
         return json.dumps({"result": "Error: You must provide at least one of brand, model, sub_model, or year."})
 
-    print(f"[TOOL CALL] search_quotation_details: brand={brand}, model={model}, sub_model={sub_model}, year={year}")
+    # Clean year accidentally put into sub_model by LLM
+    if sub_model:
+        sub_model = _clean_sub_model(sub_model)
+
+    print(f"[TOOL] search_quotation_details → brand={brand!r}, model={model!r}, sub_model={sub_model!r}, year={year}")
 
     client = get_supabase_client()
-    query = client.table("vw_quotation_details").select("*")
-    
-    if brand:
-        query = query.ilike("brand", f"%{brand}%")
-    if model:
-        query = query.ilike("model", f"%{model}%")
-    if sub_model:
-        # Sometimes LLMs pass "rs 2024" into sub_model. Strip digits if possible or rely on the fallback.
-        query = query.ilike("sub_model", f"%{sub_model}%")
+
+    def _run_query(b, m, s, y):
+        q = client.table("vw_quotation_details").select("*")
+        if b:
+            q = q.ilike("brand", f"%{b}%")
+        if m:
+            q = q.ilike("model", f"%{m}%")
+        if s:
+            q = q.ilike("sub_model", f"%{s}%")
+        if y:
+            q = q.eq("year", y)
+        return q.execute().data
+
+    # Attempt 1: Full exact search
+    data = _run_query(brand, model, sub_model, year)
+    if data:
+        return json.dumps({"result": "Found quotation details.", "records": data})
+
+    # Attempt 2: Drop year constraint
     if year:
-        query = query.eq("year", year)
+        data = _run_query(brand, model, sub_model, None)
+        if data:
+            return json.dumps({"result": "Found quotation details (year relaxed).", "records": data})
 
-    resp = query.execute()
-    
-    if resp.data:
-        return json.dumps({"result": "Found quotation details.", "records": resp.data})
-
-    # Fallback 1: Broad search without sub_model and year
-    if sub_model or year:
-        fallback_query = client.table("vw_quotation_details").select("*")
-        if brand:
-            fallback_query = fallback_query.ilike("brand", f"%{brand}%")
-        if model:
-            fallback_query = fallback_query.ilike("model", f"%{model}%")
-            
-        fallback_resp = fallback_query.execute()
-        if fallback_resp.data:
+    # Attempt 3: Drop sub_model constraint
+    if sub_model:
+        data = _run_query(brand, model, None, year)
+        if data:
             return json.dumps({
-                "result": f"No exact match found, but found these related models. Please check if any of these match what the user wants.", 
-                "records": fallback_resp.data
+                "result": f"No exact match for sub_model '{sub_model}'. Here are available trims — pick the closest one.",
+                "records": data,
             })
 
-    # Fallback 2: If model was too specific (e.g. "Honda Civic"), just search by brand
+    # Attempt 4: Brand + model only
+    if brand or model:
+        data = _run_query(brand, model, None, None)
+        if data:
+            return json.dumps({
+                "result": f"Could not match '{sub_model or ''}' trim. Here are all available variants for {brand or ''} {model or ''}.",
+                "records": data,
+            })
+
+    # Attempt 5: Brand only
     if brand:
-        brand_resp = client.table("vw_quotation_details").select("*").ilike("brand", f"%{brand}%").execute()
-        if brand_resp.data:
+        data = _run_query(brand, None, None, None)
+        if data:
             return json.dumps({
-                "result": f"Could not find exact model '{model}', but here are all '{brand}' vehicles available. Find the closest match.",
-                "records": brand_resp.data
+                "result": f"Could not find exact model. Here are all available {brand} vehicles.",
+                "records": data,
             })
 
-    # Fallback 3: Return everything if we really can't find anything
-    all_resp = client.table("vw_quotation_details").select("brand, model, sub_model, year").execute()
+    # Last resort: return full catalogue
+    all_data = client.table("vw_quotation_details").select("brand, model, sub_model, year").execute().data
     return json.dumps({
-        "result": "No matching quotation details found. Here is a list of all available cars in the database to help you find the right one.", 
-        "records": all_resp.data
+        "result": "No matching vehicle found. Here is the full catalogue to help you select the correct car.",
+        "records": all_data,
     })
