@@ -85,7 +85,14 @@ async def chat(request: ChatRequest):
         result = await agent_executor.ainvoke({"messages": messages})
 
         last_message = result["messages"][-1]
-        ai_reply: str = last_message.content if hasattr(last_message, "content") else str(last_message)
+        raw_content = last_message.content if hasattr(last_message, "content") else str(last_message)
+        
+        if isinstance(raw_content, list):
+            # Extract text from multimodal response list
+            text_parts = [item["text"] for item in raw_content if isinstance(item, dict) and "text" in item]
+            ai_reply = "\n".join(text_parts) if text_parts else str(raw_content)
+        else:
+            ai_reply = str(raw_content)
 
         _save_message(request.session_id, "user", request.message)
         _save_message(request.session_id, "ai", ai_reply)
