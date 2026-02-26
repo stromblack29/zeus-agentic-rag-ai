@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Zeus.MAUI.ViewModels"
+             xmlns:models="clr-namespace:Zeus.MAUI.Models"
+             x:Class="Zeus.MAUI.Views.ChatPage"
+             x:DataType="vm:ChatViewModel"
+             Title="Zeus AI Insurance"
+             BackgroundColor="#0F172A">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <!-- User bubble style -->
+            <Style x:Key="UserBubble" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#3B82F6" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 16,4,16,16" />
+                <Setter Property="Padding" Value="12,8" />
+                <Setter Property="MaximumWidthRequest" Value="280" />
+                <Setter Property="Margin" Value="60,4,8,4" />
+                <Setter Property="HorizontalOptions" Value="End" />
+            </Style>
+
+            <!-- AI bubble style -->
+            <Style x:Key="AiBubble" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1E293B" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 4,16,16,16" />
+                <Setter Property="Padding" Value="12,8" />
+                <Setter Property="MaximumWidthRequest" Value="280" />
+                <Setter Property="Margin" Value="8,4,60,4" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Header -->
+        <Border Grid.Row="0"
+                BackgroundColor="#1E293B"
+                Padding="16,12">
+            <Grid ColumnDefinitions="Auto,*">
+                <Image Grid.Column="0"
+                       Source="zeus_logo.png"
+                       HeightRequest="36"
+                       WidthRequest="36"
+                       VerticalOptions="Center"
+                       Margin="0,0,12,0" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="Zeus AI"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Insurance Quotation Assistant"
+                           FontSize="12"
+                           TextColor="#94A3B8" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Chat Messages -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Messages}"
+                        x:Name="MessagesCollectionView"
+                        Margin="0,8">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ChatMessage">
+                    <Grid>
+                        <!-- User message -->
+                        <Border Style="{StaticResource UserBubble}"
+                                IsVisible="{Binding IsUser}">
+                            <Label Text="{Binding Text}"
+                                   TextColor="White"
+                                   FontSize="14"
+                                   LineBreakMode="WordWrap" />
+                        </Border>
+
+                        <!-- AI message -->
+                        <Border Style="{StaticResource AiBubble}"
+                                IsVisible="{Binding IsUser, Converter={StaticResource InverseBoolConverter}}">
+                            <Label Text="{Binding Text}"
+                                   TextColor="#E2E8F0"
+                                   FontSize="14"
+                                   LineBreakMode="WordWrap" />
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     Padding="24">
+                    <Label Text="👋"
+                           FontSize="48"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,12" />
+                    <Label Text="Hello! I'm Zeus AI."
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label Text="Tell me about your car or upload an image to get an insurance quotation."
+                           FontSize="14"
+                           TextColor="#94A3B8"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,8,0,0" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="#3B82F6"
+                           VerticalOptions="End"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,8" />
+
+        <!-- Image preview bar -->
+        <Border Grid.Row="2"
+                BackgroundColor="#1E293B"
+                Padding="8,6"
+                IsVisible="{Binding PendingImagePreview, Converter={StaticResource IsNotNullConverter}}">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Image Grid.Column="0"
+                       Source="{Binding PendingImagePreview}"
+                       HeightRequest="48"
+                       WidthRequest="48"
+                       Aspect="AspectFill"
+                       Margin="0,0,8,0">
+                    <Image.Clip>
+                        <RoundRectangleGeometry CornerRadius="6"
+                                                Rect="0,0,48,48" />
+                    </Image.Clip>
+                </Image>
+                <Label Grid.Column="1"
+                       Text="Image ready to send"
+                       TextColor="#94A3B8"
+                       VerticalOptions="Center"
+                       FontSize="13" />
+                <Button Grid.Column="2"
+                        Text="✕"
+                        TextColor="#94A3B8"
+                        BackgroundColor="Transparent"
+                        FontSize="16"
+                        Command="{Binding ClearImageCommand}" />
+            </Grid>
+        </Border>
+
+        <!-- Input bar -->
+        <Border Grid.Row="2"
+                BackgroundColor="#1E293B"
+                Padding="8"
+                StrokeThickness="0">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+
+                <!-- Upload image button -->
+                <Button Grid.Column="0"
+                        Text="📷"
+                        FontSize="20"
+                        BackgroundColor="Transparent"
+                        TextColor="#94A3B8"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        Command="{Binding PickImageCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" />
+
+                <!-- Text input -->
+                <Border Grid.Column="1"
+                        BackgroundColor="#0F172A"
+                        StrokeShape="RoundRectangle 22"
+                        Stroke="#334155"
+                        Padding="12,0"
+                        Margin="4,0">
+                    <Entry Placeholder="Ask about your car insurance..."
+                           PlaceholderColor="#475569"
+                           Text="{Binding MessageInput}"
+                           TextColor="White"
+                           BackgroundColor="Transparent"
+                           ReturnCommand="{Binding SendMessageCommand}"
+                           ReturnType="Send"
+                           IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <!-- Send button -->
+                <Button Grid.Column="2"
+                        Text="➤"
+                        FontSize="18"
+                        BackgroundColor="#3B82F6"
+                        TextColor="White"
+                        CornerRadius="22"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        Command="{Binding SendMessageCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" />
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

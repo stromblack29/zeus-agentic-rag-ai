@@ -1,0 +1,20 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+
+# Supabase
+supabase
+
+# LangChain ecosystem
+langchain
+langchain-core
+langchain-google-genai
+langchain-community
+
+# Google Generative AI SDK
+google-generativeai
+
+# HTTP
+httpx
+
