@@ -1,5 +1,7 @@
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from tools.quotation_db_tool import search_quotation_details
@@ -30,12 +32,41 @@ Your workflow when helping a user:
 tools = [search_quotation_details, search_policy_documents]
 
 
-def create_agent_executor() -> create_react_agent:
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        google_api_key=os.environ["GEMINI_API_KEY"],
-        temperature=0.2,
-    )
+def create_agent_executor(model_choice: str = "gemini-2.5-flash") -> create_react_agent:
+    if model_choice == "gemma-3-27b":
+        llm = ChatGoogleGenerativeAI(
+            model="gemma-3-27b-it",
+            google_api_key=os.environ["GEMINI_API_KEY"],
+            temperature=0.2,
+        )
+    elif model_choice == "ollama":
+        # Connecting to local Ollama instance
+        llm = ChatOllama(
+            model="glm4:9b", # Using glm4, as "glm-4.7-flash" is not a standard Ollama tag
+            base_url="http://localhost:11434",
+            temperature=0.2,
+        )
+    elif model_choice == "openrouter":
+        # Connecting to OpenRouter for Qwen 3
+        llm = ChatOpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=os.environ.get("OPENROUTER_API_KEY"),
+            model="qwen/qwen3-235b-a22b-thinking-2507",
+            temperature=0.2,
+        )
+    else:
+        # Default to Gemini 2.5 Flash with Gemma 3 fallback
+        primary_llm = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash",
+            google_api_key=os.environ["GEMINI_API_KEY"],
+            temperature=0.2,
+        )
+        fallback_llm = ChatGoogleGenerativeAI(
+            model="gemma-3-27b-it",
+            google_api_key=os.environ["GEMINI_API_KEY"],
+            temperature=0.2,
+        )
+        llm = primary_llm.with_fallbacks([fallback_llm])
 
     agent_executor = create_react_agent(
         llm, 

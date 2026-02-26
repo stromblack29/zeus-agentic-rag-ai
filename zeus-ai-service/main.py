@@ -25,18 +25,23 @@ class ChatRequest(BaseModel):
         default=None,
         description="Optional base64-encoded JPEG/PNG image",
     )
+    llm_model: Optional[str] = Field(
+        default="gemini-2.5-flash",
+        description="Select LLM model: 'gemini-2.5-flash', 'gemma-3-27b', 'ollama', or 'openrouter'",
+    )
 
 
 class ChatResponse(BaseModel):
     session_id: str
     reply: str
+    model_used: str
 
 
 # ── App Lifespan ───────────────────────────────────────────────────────────────
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.agent_executor = create_agent_executor()
+    # Instead of creating one executor, we will create them per-request based on the model
     yield
 
 
@@ -79,7 +84,8 @@ async def chat(request: ChatRequest):
 
         human_input = build_human_input(request.message, request.image_base64)
 
-        agent_executor: object = app.state.agent_executor
+        # Create agent executor on the fly with the requested model
+        agent_executor = create_agent_executor(model_choice=request.llm_model)
 
         messages = chat_history + [HumanMessage(content=human_input)]
         result = await agent_executor.ainvoke({"messages": messages})
@@ -97,7 +103,11 @@ async def chat(request: ChatRequest):
         _save_message(request.session_id, "user", request.message)
         _save_message(request.session_id, "ai", ai_reply)
 
-        return ChatResponse(session_id=request.session_id, reply=ai_reply)
+        return ChatResponse(
+            session_id=request.session_id, 
+            reply=ai_reply,
+            model_used=request.llm_model
+        )
 
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
