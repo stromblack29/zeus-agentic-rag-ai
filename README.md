@@ -176,7 +176,7 @@ python ingest_embeddings.py --section Coverage
 
 ```bash
 cd zeus-ai-service
-uvicorn main:app --reload --port 8000
+python -m uvicorn main:app --reload --port 8000
 ```
 
 API docs available at: `http://localhost:8000/docs`
