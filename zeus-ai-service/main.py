@@ -254,7 +254,7 @@ async def get_sessions():
             session_id = row["session_id"]
             if session_id not in sessions_dict:
                 # Get first user message as preview
-                preview = row["message"][:100] if row["role"] == "user" else "..."
+                preview = row["message"][:100] if row["role"] == "user" else row["message"][:50]
                 sessions_dict[session_id] = {
                     "session_id": session_id,
                     "last_message_at": row["created_at"],

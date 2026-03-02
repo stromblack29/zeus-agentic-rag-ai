@@ -394,46 +394,47 @@ export function ZeusChatWindow() {
   </div>
 );
 
-function WelcomeScreen({ onPrompt }: { onPrompt: (p: string) => void }) {
-  return (
-    <div className="flex flex-col items-center justify-center h-full min-h-[60vh] px-4 text-center">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-3xl mb-4 shadow-xl">
-        ⚡
-      </div>
-      <h2 className="text-white text-2xl font-bold mb-2">Zeus Insurance AI</h2>
-      <p className="text-blue-300 text-sm mb-8 max-w-md">
-        ผู้ช่วย AI สำหรับประกันรถยนต์ในประเทศไทย ·
-        สอบถามราคาเบี้ยประกัน เปรียบเทียบแผน และสร้างใบเสนอราคาได้ทันที
-      </p>
+  function WelcomeScreen({ onPrompt }: { onPrompt: (p: string) => void }) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[60vh] px-4 text-center">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-3xl mb-4 shadow-xl">
+          ⚡
+        </div>
+        <h2 className="text-white text-2xl font-bold mb-2">Zeus Insurance AI</h2>
+        <p className="text-blue-300 text-sm mb-8 max-w-md">
+          ผู้ช่วย AI สำหรับประกันรถยนต์ในประเทศไทย ·
+          สอบถามราคาเบี้ยประกัน เปรียบเทียบแผน และสร้างใบเสนอราคาได้ทันที
+        </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
-        {SUGGESTED_PROMPTS.map((prompt) => (
-          <button
-            key={prompt}
-            onClick={() => onPrompt(prompt)}
-            className="text-left bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 text-white/80 text-sm rounded-xl p-3 transition-all"
-          >
-            {prompt}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function TypingIndicator() {
-  return (
-    <div className="flex items-start gap-3 mr-auto max-w-[80%] mb-4">
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-sm flex-shrink-0">
-        ⚡
-      </div>
-      <div className="bg-white/10 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
-        <div className="flex gap-1 items-center h-4">
-          <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0ms]" />
-          <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:150ms]" />
-          <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:300ms]" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
+          {SUGGESTED_PROMPTS.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => onPrompt(prompt)}
+              className="text-left bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 text-white/80 text-sm rounded-xl p-3 transition-all"
+            >
+              {prompt}
+            </button>
+          ))}
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  function TypingIndicator() {
+    return (
+      <div className="flex items-start gap-3 mr-auto max-w-[80%] mb-4">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-sm flex-shrink-0">
+          ⚡
+        </div>
+        <div className="bg-white/10 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3">
+          <div className="flex gap-1 items-center h-4">
+            <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0ms]" />
+            <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:150ms]" />
+            <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:300ms]" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
