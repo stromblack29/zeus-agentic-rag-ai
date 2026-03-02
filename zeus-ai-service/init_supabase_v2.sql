@@ -452,202 +452,202 @@ INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
 -- Honda Civic variants
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
     -- Type R
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Type R' AND name='Civic'), 45000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Type R' AND name='Civic'), 22000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Type R' AND name='Civic'), 15000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Type R' AND name='Civic' LIMIT 1), 45000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Type R' AND name='Civic' LIMIT 1), 22000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Type R' AND name='Civic' LIMIT 1), 15000.00, 5000.00),
     -- e:HEV RS
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='e:HEV RS'), 25000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='e:HEV RS'), 13000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='e:HEV RS'), 9500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='e:HEV RS' LIMIT 1), 25000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='e:HEV RS' LIMIT 1), 13000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='e:HEV RS' LIMIT 1), 9500.00, 3000.00),
     -- Civic EL
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='EL' AND name='Civic'), 18000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='EL' AND name='Civic'), 10000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='EL' AND name='Civic'), 7500.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='EL' AND name='Civic' LIMIT 1), 18000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='EL' AND name='Civic' LIMIT 1), 10000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='EL' AND name='Civic' LIMIT 1), 7500.00, 3000.00);
 
 -- Honda City variants
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='SV' AND name='City'), 15000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='SV' AND name='City'), 8500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='SV' AND name='City'), 6500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='RS' AND name='City'), 16500.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='RS' AND name='City'), 9000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='RS' AND name='City'), 7000.00, 2000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='SV' AND name='City' LIMIT 1), 15000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='SV' AND name='City' LIMIT 1), 8500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='SV' AND name='City' LIMIT 1), 6500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='RS' AND name='City' LIMIT 1), 16500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='RS' AND name='City' LIMIT 1), 9000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='RS' AND name='City' LIMIT 1), 7000.00, 2000.00);
 
 -- Toyota Camry variants
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Camry'), 26000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Camry'), 14000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Camry'), 10500.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5 HV Premium' AND name='Camry'), 27500.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5 HV Premium' AND name='Camry'), 14500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='2.5 HV Premium' AND name='Camry'), 11000.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Camry' LIMIT 1), 26000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Camry' LIMIT 1), 14000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Camry' LIMIT 1), 10500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5 HV Premium' AND name='Camry' LIMIT 1), 27500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5 HV Premium' AND name='Camry' LIMIT 1), 14500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='2.5 HV Premium' AND name='Camry' LIMIT 1), 11000.00, 3000.00);
 
 -- EV Models (Tesla, BYD, MG)
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
     -- Tesla Model 3
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='Model 3'), 42000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Performance' AND name='Model 3'), 48000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='Model 3' LIMIT 1), 42000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Performance' AND name='Model 3' LIMIT 1), 48000.00, 5000.00),
     -- Tesla Model Y
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='Model Y'), 46000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Performance' AND name='Model Y'), 55000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='Model Y' LIMIT 1), 46000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Performance' AND name='Model Y' LIMIT 1), 55000.00, 5000.00),
     -- BYD Seal
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Premium' AND name='Seal'), 32000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Excellence' AND name='Seal'), 35000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Premium' AND name='Seal' LIMIT 1), 32000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Excellence' AND name='Seal' LIMIT 1), 35000.00, 0.00),
     -- BYD Dolphin
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Extended Range' AND name='Dolphin'), 22000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Extended Range' AND name='Dolphin' LIMIT 1), 22000.00, 0.00),
     -- MG ZS EV
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='ZS EV'), 28000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='ZS EV' LIMIT 1), 28000.00, 0.00),
     -- MG4 EV
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='MG4 EV'), 26000.00, 0.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range' AND name='MG4 EV' LIMIT 1), 26000.00, 0.00);
 
 -- Luxury Models (BMW, Mercedes-Benz)
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
     -- BMW 3 Series
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='330e M Sport' AND name='3 Series'), 48000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='330e M Sport' AND name='3 Series'), 24000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='330e M Sport' AND name='3 Series'), 18000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='330e M Sport' AND name='3 Series' LIMIT 1), 48000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='330e M Sport' AND name='3 Series' LIMIT 1), 24000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='330e M Sport' AND name='3 Series' LIMIT 1), 18000.00, 5000.00),
     -- BMW 5 Series
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='530e M Sport' AND name='5 Series'), 62000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='530e M Sport' AND name='5 Series' LIMIT 1), 62000.00, 5000.00),
     -- Mercedes C-Class
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class'), 52000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class'), 26000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class'), 20000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class' LIMIT 1), 52000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class' LIMIT 1), 26000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class' LIMIT 1), 20000.00, 5000.00),
     -- Mercedes E-Class
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='E 300e AMG Dynamic' AND name='E-Class'), 65000.00, 5000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='E 300e AMG Dynamic' AND name='E-Class' LIMIT 1), 65000.00, 5000.00);
 
 -- Ford Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD'), 22000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD'), 11000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD'), 8500.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Raptor 3.0 V6'), 35000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Raptor 3.0 V6'), 18000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD'), 34000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD'), 17500.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD'), 13000.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD' LIMIT 1), 22000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD' LIMIT 1), 11000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD' LIMIT 1), 8500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Raptor 3.0 V6' LIMIT 1), 35000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Raptor 3.0 V6' LIMIT 1), 18000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD' LIMIT 1), 34000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD' LIMIT 1), 17500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD' LIMIT 1), 13000.00, 3000.00);
 
 -- Hyundai Models (EV/Hybrid via EV Shield; ICE via standard plans)
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 5'), 50000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 5'), 48000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 6'), 52000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 6'), 50000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Tucson'), 28000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Tucson'), 14500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta'), 16000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta'), 8500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta'), 6500.00, 2000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 5' LIMIT 1), 50000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 5' LIMIT 1), 48000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 6' LIMIT 1), 52000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 6' LIMIT 1), 50000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Tucson' LIMIT 1), 28000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Tucson' LIMIT 1), 14500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta' LIMIT 1), 16000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta' LIMIT 1), 8500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta' LIMIT 1), 6500.00, 2000.00);
 
 -- Subaru Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester'), 30000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester'), 15500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester'), 11500.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GT Edition' AND name='XV'), 25000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GT Edition' AND name='XV'), 13000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5i-T EyeSight'), 35000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5i-T EyeSight'), 18000.00, 2000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester' LIMIT 1), 30000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester' LIMIT 1), 15500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester' LIMIT 1), 11500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GT Edition' AND name='XV' LIMIT 1), 25000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GT Edition' AND name='XV' LIMIT 1), 13000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5i-T EyeSight' LIMIT 1), 35000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5i-T EyeSight' LIMIT 1), 18000.00, 2000.00);
 
 -- Suzuki Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift'), 13000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift'), 7000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift'), 5500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga'), 14500.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga'), 7500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga'), 5800.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='1.4 Turbo GLX'), 18500.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='1.4 Turbo GLX'), 9500.00, 2000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift' LIMIT 1), 13000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift' LIMIT 1), 7000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift' LIMIT 1), 5500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga' LIMIT 1), 14500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga' LIMIT 1), 7500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga' LIMIT 1), 5800.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='1.4 Turbo GLX' LIMIT 1), 18500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='1.4 Turbo GLX' LIMIT 1), 9500.00, 2000.00);
 
 -- Audi Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line'), 45000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line'), 22000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line'), 17000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='45 TFSI quattro S line'), 58000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='45 TFSI quattro S line'), 29000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Q8 55 quattro'), 95000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Q8 55 quattro'), 92000.00, 5000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line' LIMIT 1), 45000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line' LIMIT 1), 22000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line' LIMIT 1), 17000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='45 TFSI quattro S line' LIMIT 1), 58000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='45 TFSI quattro S line' LIMIT 1), 29000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Q8 55 quattro' LIMIT 1), 95000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Q8 55 quattro' LIMIT 1), 92000.00, 5000.00);
 
 -- Porsche Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='S E-Hybrid'), 115000.00, 10000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='T' AND name='Macan'), 75000.00, 8000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='4S'), 125000.00, 10000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='4S'), 120000.00, 10000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='S E-Hybrid' LIMIT 1), 115000.00, 10000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='T' AND name='Macan' LIMIT 1), 75000.00, 8000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='4S' LIMIT 1), 125000.00, 10000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='4S' LIMIT 1), 120000.00, 10000.00);
 
 -- Volvo EV/PHEV Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin Pure Electric'), 55000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin Pure Electric'), 52000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Plug-in T8'), 60000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Plug-in T8'), 57000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin' AND name='C40'), 58000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin' AND name='C40'), 55000.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin Pure Electric' LIMIT 1), 55000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin Pure Electric' LIMIT 1), 52000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Plug-in T8' LIMIT 1), 60000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Plug-in T8' LIMIT 1), 57000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin' AND name='C40' LIMIT 1), 58000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin' AND name='C40' LIMIT 1), 55000.00, 3000.00);
 
 -- Chevrolet Models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD'), 21000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD'), 10500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD'), 8000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='LTZ AWD'), 22500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='LTZ AWD'), 11500.00, 2000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD' LIMIT 1), 21000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD' LIMIT 1), 10500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD' LIMIT 1), 8000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='LTZ AWD' LIMIT 1), 22500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='LTZ AWD' LIMIT 1), 11500.00, 2000.00);
 
 -- Extra Nissan and Mitsubishi models
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD'), 19500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD'), 9500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD'), 7500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT'), 13500.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT'), 7000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT'), 5500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Eclipse Cross'), 36000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Eclipse Cross'), 18000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Outlander'), 39000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Outlander'), 20000.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD' LIMIT 1), 19500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD' LIMIT 1), 9500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD' LIMIT 1), 7500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT' LIMIT 1), 13500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT' LIMIT 1), 7000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT' LIMIT 1), 5500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Eclipse Cross' LIMIT 1), 36000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Eclipse Cross' LIMIT 1), 18000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Outlander' LIMIT 1), 39000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Outlander' LIMIT 1), 20000.00, 3000.00);
 
 -- 2025 Model Year Premiums
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025), 26000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025), 13500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025), 10000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='CR-V' AND sub_model='e:HEV EL' AND year=2025), 28000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='CR-V' AND sub_model='e:HEV EL' AND year=2025), 14500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025), 27000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025), 14000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025), 10500.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025), 31000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025), 16000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025), 12000.00, 3000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Seal' AND sub_model='Premium' AND year=2025), 33500.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Atto 3' AND sub_model='Extended Range' AND year=2025), 24000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Model 3' AND sub_model='Long Range' AND year=2025), 43000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Model Y' AND sub_model='Long Range' AND year=2025), 47000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='MG4 EV' AND sub_model='Long Range' AND year=2025), 27000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='3 Series' AND sub_model='330e M Sport' AND year=2025), 51000.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='3 Series' AND sub_model='330e M Sport' AND year=2025), 25500.00, 5000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025), 31000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025), 16000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025), 12000.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025 LIMIT 1), 26000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025 LIMIT 1), 13500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025 LIMIT 1), 10000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='CR-V' AND sub_model='e:HEV EL' AND year=2025 LIMIT 1), 28000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='CR-V' AND sub_model='e:HEV EL' AND year=2025 LIMIT 1), 14500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025 LIMIT 1), 27000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025 LIMIT 1), 14000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025 LIMIT 1), 10500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025 LIMIT 1), 31000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025 LIMIT 1), 16000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025 LIMIT 1), 12000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Seal' AND sub_model='Premium' AND year=2025 LIMIT 1), 33500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Atto 3' AND sub_model='Extended Range' AND year=2025 LIMIT 1), 24000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Model 3' AND sub_model='Long Range' AND year=2025 LIMIT 1), 43000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Model Y' AND sub_model='Long Range' AND year=2025 LIMIT 1), 47000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='MG4 EV' AND sub_model='Long Range' AND year=2025 LIMIT 1), 27000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='3 Series' AND sub_model='330e M Sport' AND year=2025 LIMIT 1), 51000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='3 Series' AND sub_model='330e M Sport' AND year=2025 LIMIT 1), 25500.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025 LIMIT 1), 31000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025 LIMIT 1), 16000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025 LIMIT 1), 12000.00, 3000.00);
 
 -- Popular SUVs and Pickups
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
     -- Toyota Fortuner
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Legender' AND name='Fortuner'), 29000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Legender' AND name='Fortuner'), 15000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Legender' AND name='Fortuner'), 11000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Legender' AND name='Fortuner' LIMIT 1), 29000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Legender' AND name='Fortuner' LIMIT 1), 15000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Legender' AND name='Fortuner' LIMIT 1), 11000.00, 3000.00),
     -- Isuzu D-Max
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hi-Lander Z-Prestige' AND name='D-Max'), 19000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hi-Lander Z-Prestige' AND name='D-Max'), 9500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Hi-Lander Z-Prestige' AND name='D-Max'), 7500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hi-Lander Z-Prestige' AND name='D-Max' LIMIT 1), 19000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hi-Lander Z-Prestige' AND name='D-Max' LIMIT 1), 9500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Hi-Lander Z-Prestige' AND name='D-Max' LIMIT 1), 7500.00, 2000.00),
     -- Isuzu MU-X
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Ultimate' AND name='MU-X'), 27000.00, 0.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Ultimate' AND name='MU-X'), 13500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Ultimate' AND name='MU-X'), 10000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Ultimate' AND name='MU-X' LIMIT 1), 27000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Ultimate' AND name='MU-X' LIMIT 1), 13500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Ultimate' AND name='MU-X' LIMIT 1), 10000.00, 3000.00),
     -- Mazda CX-5
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5 Turbo SP' AND name='CX-5'), 30000.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5 Turbo SP' AND name='CX-5'), 15500.00, 2000.00),
-    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='2.5 Turbo SP' AND name='CX-5'), 11500.00, 3000.00);
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5 Turbo SP' AND name='CX-5' LIMIT 1), 30000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5 Turbo SP' AND name='CX-5' LIMIT 1), 15500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='2.5 Turbo SP' AND name='CX-5' LIMIT 1), 11500.00, 3000.00);
 
 -- ============================================================
 -- 13. Comprehensive Policy Documents for RAG
