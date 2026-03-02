@@ -163,6 +163,7 @@ CREATE POLICY "Allow public read on insurance_plans" ON insurance_plans FOR SELE
 CREATE POLICY "Allow public read on plan_coverages" ON plan_coverages FOR SELECT USING (true);
 CREATE POLICY "Allow public read on plan_premiums" ON plan_premiums FOR SELECT USING (true);
 CREATE POLICY "Allow public read on policy_documents" ON policy_documents FOR SELECT USING (true);
+CREATE POLICY "Allow service role full access to policy_documents" ON policy_documents FOR ALL USING (true);
 CREATE POLICY "Allow service role full access to chat_sessions" ON chat_sessions FOR ALL USING (true);
 CREATE POLICY "Allow service role full access to quotations" ON quotations FOR ALL USING (true);
 CREATE POLICY "Allow service role full access to orders" ON orders FOR ALL USING (true);
