@@ -11,6 +11,9 @@ langchain
 langchain-core
 langchain-google-genai
 langchain-community
+langchain-ollama
+langchain-openai
+langgraph
 
 # Google Generative AI SDK
 google-generativeai
