@@ -234,6 +234,56 @@ async def chat_stream(request: ChatRequest):
     )
 
 
+@app.get("/api/sessions")
+async def get_sessions():
+    """Get list of all unique chat sessions with their last message timestamp."""
+    logger.info("📋 [SESSIONS] Fetching all chat sessions")
+    try:
+        client = get_supabase_client()
+        
+        # Get distinct session_ids with their latest message
+        response = client.table("chat_sessions").select("session_id, created_at, role, message").order("created_at", desc=True).execute()
+        
+        if not response.data:
+            logger.info("   No sessions found")
+            return {"sessions": []}
+        
+        # Group by session_id and get the latest message for each
+        sessions_dict = {}
+        for row in response.data:
+            session_id = row["session_id"]
+            if session_id not in sessions_dict:
+                # Get first user message as preview
+                preview = row["message"][:100] if row["role"] == "user" else "..."
+                sessions_dict[session_id] = {
+                    "session_id": session_id,
+                    "last_message_at": row["created_at"],
+                    "preview": preview
+                }
+        
+        sessions = list(sessions_dict.values())
+        logger.info(f"✅ [SESSIONS] Found {len(sessions)} unique sessions")
+        return {"sessions": sessions}
+    
+    except Exception as exc:
+        logger.error(f"❌ [ERROR] Failed to fetch sessions: {exc}")
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@app.get("/api/history/{session_id}")
+async def get_history(session_id: str):
+    """Get full chat history for a specific session."""
+    logger.info(f"📚 [HISTORY] Fetching history for session: {session_id}")
+    try:
+        raw_history = _fetch_history(session_id, limit=100)
+        logger.info(f"✅ [HISTORY] Retrieved {len(raw_history)} messages")
+        return {"session_id": session_id, "messages": raw_history}
+    
+    except Exception as exc:
+        logger.error(f"❌ [ERROR] Failed to fetch history: {exc}")
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "zeus-ai-service"}
