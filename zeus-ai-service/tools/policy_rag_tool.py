@@ -1,8 +1,11 @@
 import json
 import os
+import logging
 from langchain_core.tools import tool
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from database import get_supabase_client
+
+logger = logging.getLogger("zeus.tools.policy_rag")
 
 
 def _get_embeddings_model() -> GoogleGenerativeAIEmbeddings:
@@ -30,16 +33,21 @@ def search_policy_documents(query: str, section: str = None) -> str:
         A JSON string with the most relevant policy document excerpts and their
         similarity scores.
     """
-    print(f"\n[RAG TOOL START] Received query: '{query}' | Section filter: {section}")
+    logger.info("📚 [POLICY RAG] Starting semantic search")
+    logger.info(f"   Query: {query[:100]}..." if len(query) > 100 else f"   Query: {query}")
+    logger.info(f"   Section filter: {section or 'None (all sections)'}")
+    
     client = get_supabase_client()
     
-    print(f"[RAG TOOL] Getting embeddings for query...")
+    logger.info("🔢 [EMBEDDING] Generating query embedding...")
     embeddings_model = _get_embeddings_model()
     query_embedding = embeddings_model.embed_query(query)
+    logger.info(f"   Original dimensions: {len(query_embedding)}")
 
     # Trim to 2000 dimensions to match DB schema
     trimmed_query_embedding = query_embedding[:2000]
-    print(f"[RAG TOOL] Query embedded. Sending RPC call to Supabase...")
+    logger.info(f"   Trimmed to: {len(trimmed_query_embedding)} dimensions")
+    logger.info("🔍 [DATABASE] Calling match_documents RPC...")
 
     response = client.rpc(
         "match_documents",
@@ -51,10 +59,10 @@ def search_policy_documents(query: str, section: str = None) -> str:
         },
     ).execute()
 
-    print(f"[RAG TOOL] RPC response received. Number of raw matches: {len(response.data) if response.data else 0}")
+    logger.info(f"📊 [RESULTS] Received {len(response.data) if response.data else 0} matches")
 
     if not response.data:
-        print("[RAG TOOL] No documents found above threshold.")
+        logger.warning("⚠️  [NO RESULTS] No documents found above similarity threshold 0.4")
         return json.dumps(
             {
                 "result": "No relevant policy documents found for this query.",
@@ -71,7 +79,10 @@ def search_policy_documents(query: str, section: str = None) -> str:
         for doc in response.data
     ]
     
-    print(f"[RAG TOOL END] Processed {len(documents)} document(s) for LLM analysis.")
+    for i, doc in enumerate(documents, 1):
+        logger.info(f"   [{i}] Similarity: {doc['similarity']:.4f} | {doc['content'][:80]}...")
+    
+    logger.info(f"✅ [SUCCESS] Returning {len(documents)} relevant document(s)")
 
     return json.dumps(
         {

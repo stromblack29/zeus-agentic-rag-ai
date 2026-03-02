@@ -298,6 +298,114 @@ curl -N -X POST http://localhost:3000/api/chat \
 
 ---
 
+## Logging & Monitoring
+
+Zeus AI Service provides **comprehensive task-by-task logging** to track every operation in real-time. All logs are formatted with timestamps, log levels, and emoji indicators for easy visual scanning.
+
+### Log Categories
+
+| Category | Logger Name | Description |
+|---|---|---|
+| **Main API** | `zeus` | Request/response tracking, session management, agent execution |
+| **Quotation Search** | `zeus.tools.quotation` | Vehicle search attempts, fallback strategies, result counts |
+| **Policy RAG** | `zeus.tools.policy_rag` | Embedding generation, semantic search, document retrieval |
+| **Create Quotation** | `zeus.tools.create_quotation` | Quotation creation, validation, database insertion |
+| **Order Management** | `zeus.tools.order` | Order creation, payment updates, status checks |
+
+### Example Log Output
+
+```
+2026-03-02 12:30:45 [INFO] zeus: ================================================================================
+2026-03-02 12:30:45 [INFO] zeus: 📨 [CHAT REQUEST] New chat request received
+2026-03-02 12:30:45 [INFO] zeus:    Session ID: abc-123-def
+2026-03-02 12:30:45 [INFO] zeus:    Model: gemini-2.5-flash
+2026-03-02 12:30:45 [INFO] zeus:    Message: ประกันชั้น 1 Honda Civic e:HEV RS 2024 เท่าไร?
+2026-03-02 12:30:45 [INFO] zeus:    Has Image: False
+2026-03-02 12:30:45 [INFO] zeus: 📚 [HISTORY] Fetching chat history...
+2026-03-02 12:30:45 [INFO] zeus:    Retrieved 0 previous messages
+2026-03-02 12:30:45 [INFO] zeus: 🤖 [AGENT] Creating agent executor with model: gemini-2.5-flash
+2026-03-02 12:30:45 [INFO] zeus: 🔄 [AGENT] Invoking agent executor...
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation: 🔍 [QUOTATION SEARCH] Starting vehicle search
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation:    Brand: Honda
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation:    Model: Civic
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation:    Sub-model: e:HEV RS
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation:    Year: 2024
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation: 🎯 [ATTEMPT 1] Exact match search (all parameters)
+2026-03-02 12:30:46 [INFO] zeus.tools.quotation: ✅ [SUCCESS] Found 4 exact matches
+2026-03-02 12:30:47 [INFO] zeus: ✅ [AGENT] Agent execution completed
+2026-03-02 12:30:47 [INFO] zeus: 💾 [STORAGE] Saving messages to database...
+2026-03-02 12:30:47 [INFO] zeus: ✅ [STORAGE] Messages saved successfully
+2026-03-02 12:30:47 [INFO] zeus: 📤 [RESPONSE] Sending reply (523 chars)
+2026-03-02 12:30:47 [INFO] zeus: ================================================================================
+```
+
+### Streaming Logs (SSE)
+
+```
+2026-03-02 12:35:10 [INFO] zeus: 🌊 [STREAM] Starting streaming response
+2026-03-02 12:35:10 [INFO] zeus: 🔧 [TOOL START] search_policy_documents
+2026-03-02 12:35:10 [INFO] zeus.tools.policy_rag: 📚 [POLICY RAG] Starting semantic search
+2026-03-02 12:35:10 [INFO] zeus.tools.policy_rag:    Query: Does Type 1 cover flood damage?
+2026-03-02 12:35:10 [INFO] zeus.tools.policy_rag:    Section filter: Coverage
+2026-03-02 12:35:10 [INFO] zeus.tools.policy_rag: 🔢 [EMBEDDING] Generating query embedding...
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag:    Original dimensions: 768
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag:    Trimmed to: 2000 dimensions
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag: 🔍 [DATABASE] Calling match_documents RPC...
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag: 📊 [RESULTS] Received 3 matches
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag:    [1] Similarity: 0.8234 | Flood and Fire Coverage: Protects the insured vehicle...
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag:    [2] Similarity: 0.7891 | Flooding Scenario — Driving into Flooded Road...
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag:    [3] Similarity: 0.7456 | Deductible Definition: A deductible (or excess)...
+2026-03-02 12:35:11 [INFO] zeus.tools.policy_rag: ✅ [SUCCESS] Returning 3 relevant document(s)
+2026-03-02 12:35:11 [INFO] zeus: ✅ [TOOL END] search_policy_documents
+2026-03-02 12:35:13 [INFO] zeus: 🏁 [STREAM] Stream completed successfully
+```
+
+### Order Creation Logs
+
+```
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: 📝 [CREATE QUOTATION] Starting quotation creation
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Session ID: abc-123-def
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Car Model ID: 5
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Plan ID: 1
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Customer: John Doe
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: 🔍 [DATABASE] Fetching quotation details from view...
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: ✅ [FOUND] Honda Civic e:HEV RS (2024)
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Plan: Zeus Comprehensive Plus (Type 1)
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Premium: 25000.00 THB
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation:    Deductible: 0.00 THB
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: 🔢 [GENERATE] Quotation number: QT-20260302-A1B2
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: 📅 [VALIDITY] Valid until: 2026-04-01
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: 💰 [CALCULATE] Total premium: 25000.0 THB
+2026-03-02 13:00:00 [INFO] zeus.tools.create_quotation: 💾 [DATABASE] Inserting quotation record: QT-20260302-A1B2
+2026-03-02 13:00:01 [INFO] zeus.tools.create_quotation: ✅ [SUCCESS] Quotation created successfully
+2026-03-02 13:00:01 [INFO] zeus.tools.create_quotation:    Quotation ID: uuid-here
+2026-03-02 13:00:01 [INFO] zeus.tools.create_quotation:    Quotation Number: QT-20260302-A1B2
+2026-03-02 13:00:01 [INFO] zeus.tools.create_quotation:    Status: draft
+```
+
+### Viewing Logs
+
+**Console output** (default):
+```bash
+python -m uvicorn main:app --reload --port 8000
+```
+
+**Save to file**:
+```bash
+python -m uvicorn main:app --reload --port 8000 2>&1 | tee zeus-ai.log
+```
+
+**Filter by component**:
+```bash
+# Only quotation search logs
+python -m uvicorn main:app --reload --port 8000 2>&1 | grep "zeus.tools.quotation"
+
+# Only RAG logs
+python -m uvicorn main:app --reload --port 8000 2>&1 | grep "zeus.tools.policy_rag"
+```
+
+---
+
 ## Troubleshooting
 
 | Issue | Solution |

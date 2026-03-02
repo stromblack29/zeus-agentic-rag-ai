@@ -17,7 +17,13 @@ from langchain_core.messages import HumanMessage
 from database import get_supabase_client
 from agent import create_agent_executor, build_chat_history, build_human_input
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 logger = logging.getLogger("zeus")
+logger.setLevel(logging.INFO)
 
 # ── Pydantic Models ────────────────────────────────────────────────────────────
 
@@ -92,17 +98,29 @@ def _fetch_history(session_id: str, limit: int = 20) -> list[dict]:
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
+    logger.info("="*80)
+    logger.info("📨 [CHAT REQUEST] New chat request received")
+    logger.info(f"   Session ID: {request.session_id}")
+    logger.info(f"   Model: {request.llm_model}")
+    logger.info(f"   Message: {request.message[:100]}..." if len(request.message) > 100 else f"   Message: {request.message}")
+    logger.info(f"   Has Image: {request.image_base64 is not None}")
+    
     try:
+        logger.info("📚 [HISTORY] Fetching chat history...")
         raw_history = _fetch_history(request.session_id)
+        logger.info(f"   Retrieved {len(raw_history)} previous messages")
         chat_history = build_chat_history(raw_history)
 
         human_input = build_human_input(request.message, request.image_base64)
 
+        logger.info(f"🤖 [AGENT] Creating agent executor with model: {request.llm_model}")
         # Create agent executor on the fly with the requested model
         agent_executor = create_agent_executor(model_choice=request.llm_model)
 
         messages = chat_history + [HumanMessage(content=human_input)]
+        logger.info("🔄 [AGENT] Invoking agent executor...")
         result = await agent_executor.ainvoke({"messages": messages})
+        logger.info("✅ [AGENT] Agent execution completed")
 
         last_message = result["messages"][-1]
         raw_content = last_message.content if hasattr(last_message, "content") else str(last_message)
@@ -114,9 +132,13 @@ async def chat(request: ChatRequest):
         else:
             ai_reply = str(raw_content)
 
+        logger.info("💾 [STORAGE] Saving messages to database...")
         _save_message(request.session_id, "user", request.message)
         _save_message(request.session_id, "ai", ai_reply)
+        logger.info("✅ [STORAGE] Messages saved successfully")
 
+        logger.info(f"📤 [RESPONSE] Sending reply ({len(ai_reply)} chars)")
+        logger.info("="*80)
         return ChatResponse(
             session_id=request.session_id, 
             reply=ai_reply,
@@ -124,16 +146,29 @@ async def chat(request: ChatRequest):
         )
 
     except Exception as exc:
+        logger.error(f"❌ [ERROR] Chat request failed: {exc}")
+        logger.error("="*80)
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
 async def _stream_agent_response(request: ChatRequest) -> AsyncGenerator[str, None]:
     """Generator that yields SSE-formatted chunks from the agent."""
+    logger.info("="*80)
+    logger.info("🌊 [STREAM] Starting streaming response")
+    logger.info(f"   Session ID: {request.session_id}")
+    logger.info(f"   Model: {request.llm_model}")
+    logger.info(f"   Message: {request.message[:100]}..." if len(request.message) > 100 else f"   Message: {request.message}")
+    
+    logger.info("📚 [HISTORY] Fetching chat history...")
     raw_history = _fetch_history(request.session_id)
+    logger.info(f"   Retrieved {len(raw_history)} previous messages")
     chat_history = build_chat_history(raw_history)
     human_input = build_human_input(request.message, request.image_base64)
+    
+    logger.info(f"🤖 [AGENT] Creating streaming agent executor with model: {request.llm_model}")
     agent_executor = create_agent_executor(model_choice=request.llm_model)
     messages = chat_history + [HumanMessage(content=human_input)]
+    logger.info("🔄 [STREAM] Starting agent event stream...")
 
     full_reply = []
     try:
@@ -155,20 +190,27 @@ async def _stream_agent_response(request: ChatRequest) -> AsyncGenerator[str, No
                         yield f"data: {json.dumps({'token': content})}\n\n"
             elif kind == "on_tool_start":
                 tool_name = event.get("name", "tool")
+                logger.info(f"🔧 [TOOL START] {tool_name}")
                 yield f"data: {json.dumps({'tool_start': tool_name})}\n\n"
             elif kind == "on_tool_end":
                 tool_name = event.get("name", "tool")
+                logger.info(f"✅ [TOOL END] {tool_name}")
                 yield f"data: {json.dumps({'tool_end': tool_name})}\n\n"
     except Exception as exc:
-        logger.error("Streaming error: %s", exc)
+        logger.error(f"❌ [STREAM ERROR] {exc}")
+        logger.error("="*80)
         yield f"data: {json.dumps({'error': str(exc)})}\n\n"
         return
 
     ai_reply = "".join(full_reply)
     if ai_reply:
+        logger.info("💾 [STORAGE] Saving streamed messages to database...")
         _save_message(request.session_id, "user", request.message)
         _save_message(request.session_id, "ai", ai_reply)
+        logger.info(f"✅ [STORAGE] Saved {len(ai_reply)} chars of AI response")
 
+    logger.info("🏁 [STREAM] Stream completed successfully")
+    logger.info("="*80)
     yield f"data: {json.dumps({'done': True, 'session_id': request.session_id, 'model_used': request.llm_model})}\n\n"
 
 
