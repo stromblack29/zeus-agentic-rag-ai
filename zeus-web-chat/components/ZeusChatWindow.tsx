@@ -28,7 +28,7 @@ export function ZeusChatWindow() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [llmModel, setLlmModel] = useState("gemini-2.5-flash");
+  const [llmModel, setLlmModel] = useState("openrouter");
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
