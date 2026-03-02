@@ -1,382 +1,310 @@
-# Zeus Insurance AI - Deployment Guide
+# Zeus Insurance AI
 
-## Overview
-This guide covers deploying the expanded Zeus Insurance AI system with comprehensive Thai market data, quotation management, and multi-LLM support.
+A full-stack AI-powered car insurance assistant for the Thai market, built with **Next.js 15**, **FastAPI**, **LangGraph**, and **Supabase**.
 
-## What's New in V2
+---
 
-### 1. Expanded Database (60+ Vehicles)
-- **20 Car Brands**: Honda, Toyota, Mazda, Isuzu, Mitsubishi, Nissan, Ford, Chevrolet, MG, BYD, GWM, Tesla, BMW, Mercedes-Benz, Audi, Porsche, Volvo, Subaru, Suzuki, Hyundai
-- **60+ Vehicle Models**: Covering economy cars to luxury vehicles and EVs
-- **Realistic Thai Market Pricing**: Based on 2024 market values
+## Architecture
 
-### 2. Quotation & Order Management
-- **Quotations Table**: Stores generated quotes with customer details, validity period, and status tracking
-- **Orders Table**: Tracks purchases, payments, and policy activation
-- **Quotation Tool**: AI can now create official quotations after customer selects a plan
+```
+┌─────────────────────────────────┐
+│   zeus-web-chat (Next.js 15)    │  ← Browser UI  (port 3000)
+│   • Zeus-branded chat UI        │
+│   • Streaming SSE consumer      │
+│   • Model selector              │
+│   • Image upload (base64)       │
+│   • Session management (UUID)   │
+└────────────┬────────────────────┘
+             │  POST /api/chat  (proxy)
+             ▼
+┌─────────────────────────────────┐
+│   zeus-ai-service (FastAPI)     │  ← AI Backend  (port 8000)
+│   • LangGraph ReAct agent       │
+│   • POST /api/chat  (JSON)      │
+│   • POST /api/chat/stream (SSE) │
+│   • Multi-LLM support           │
+│   • CORS enabled                │
+└────────────┬────────────────────┘
+             │  pgvector + CRUD
+             ▼
+┌─────────────────────────────────┐
+│   Supabase (PostgreSQL)         │
+│   • car_brands / car_models     │
+│   • insurance_plans / premiums  │
+│   • policy_documents (RAG)      │
+│   • quotations / orders         │
+│   • chat_sessions               │
+└─────────────────────────────────┘
+```
 
-### 3. Enhanced Policy Documents (40+ Entries)
-- Comprehensive coverage details for all plan types
-- Detailed exclusions and conditions
-- Claims process documentation
-- Add-on coverage options
-- Payment and billing terms
-- Special conditions for young drivers, high-performance vehicles, etc.
+---
 
-### 4. Multi-LLM Support
-- **Gemini 2.5 Flash** (default with Gemma 3 27B fallback)
-- **Gemma 3 27B** (Google AI Studio)
-- **Ollama** (local - glm4:9b)
-- **OpenRouter** (Qwen 3 235B)
+## Features
 
-## Deployment Steps
+### AI Agent (LangGraph ReAct)
+The agent uses a **tool-calling loop** to answer insurance questions accurately:
 
-### Step 1: Update Database Schema
+| Tool | Purpose |
+|---|---|
+| `search_quotation_details` | Look up car models, plans, and premium pricing |
+| `search_policy_documents` | Semantic RAG search over policy documents |
+| `create_quotation` | Generate an official quotation with a QUO number |
+| `create_order` | Initiate a purchase order with payment instructions |
+| `get_order_status` | Check payment and policy activation status |
+| `update_order_payment` | Confirm payment (admin function) |
 
-1. **Open Supabase SQL Editor**
-   - Go to your Supabase project dashboard
-   - Navigate to SQL Editor
+### Database (V3 — 100+ vehicles, 65+ RAG documents)
+- **20 car brands**: Honda, Toyota, Mazda, Isuzu, Mitsubishi, Nissan, Ford, Chevrolet, MG, BYD, GWM, Tesla, BMW, Mercedes-Benz, Audi, Porsche, Volvo, Subaru, Suzuki, Hyundai
+- **100+ vehicle models**: 2024 and 2025 model years, economy to ultra-luxury
+- **4 insurance plans**: Zeus Comprehensive Plus (Type 1), Zeus EV Shield (Type 1 EV), Zeus Value Protect (Type 2+), Zeus Budget Safe (Type 3+)
+- **65+ RAG policy documents**: Coverage, Exclusions, Conditions, Definitions — in English and Thai
 
-2. **Run the New Schema**
-   ```sql
-   -- Copy and paste the entire contents of init_supabase_v2.sql
-   -- This will drop old tables and create new ones with expanded data
-   ```
+### Multi-LLM Support
+| Model | Provider | Use Case |
+|---|---|---|
+| `gemini-2.5-flash` | Google (default) | Fast, accurate, multimodal |
+| `gemma-3-27b` | Google AI Studio | Alternative Google model |
+| `ollama` | Local (glm4:9b) | Offline/private |
+| `openrouter` | OpenRouter (Qwen3-235B) | High-capability reasoning |
 
-3. **Verify Tables Created**
-   Check that these tables exist:
-   - `car_brands` (20 brands)
-   - `car_models` (60+ models)
-   - `insurance_plans` (4 plans)
-   - `plan_coverages` (coverage details)
-   - `plan_premiums` (premium matrix)
-   - `policy_documents` (40+ documents)
-   - `quotations` (NEW - for storing quotes)
-   - `orders` (NEW - for tracking purchases)
-   - `chat_sessions` (conversation history)
+### Streaming SSE
+- FastAPI streams tokens via `astream_events` as Server-Sent Events
+- Next.js proxy pipes the SSE stream directly to the browser
+- UI shows tokens progressively + animated tool call indicators
 
-### Step 2: Re-ingest Embeddings
+---
 
-The new policy documents need to be embedded for RAG search:
+## Project Structure
+
+```
+zeus-agentic-rag-ai/
+├── zeus-ai-service/          # FastAPI Python backend
+│   ├── main.py               # API endpoints (/api/chat, /api/chat/stream)
+│   ├── agent.py              # LangGraph ReAct agent + LLM config
+│   ├── database.py           # Supabase client
+│   ├── init_supabase_v2.sql  # Full DB schema + seed data
+│   ├── ingest_embeddings.py  # RAG embedding ingestion script
+│   ├── tools/
+│   │   ├── quotation_db_tool.py
+│   │   ├── policy_rag_tool.py
+│   │   ├── create_quotation_tool.py
+│   │   ├── create_order_tool.py
+│   │   └── update_order_payment.py (via create_order_tool)
+│   └── .env                  # GEMINI_API_KEY, SUPABASE_URL, etc.
+│
+└── zeus-web-chat/            # Next.js 15 frontend
+    ├── app/
+    │   ├── page.tsx           # Entry → <ZeusChatWindow />
+    │   ├── layout.tsx         # Zeus-branded root layout
+    │   └── api/chat/route.ts  # Proxy: stream → FastAPI SSE, JSON → FastAPI
+    ├── components/
+    │   ├── ZeusChatWindow.tsx # Main chat UI + streaming logic
+    │   ├── ZeusMessageBubble.tsx # Markdown + quotation/order cards
+    │   ├── ModelSelector.tsx  # LLM model dropdown
+    │   └── ImageUploadButton.tsx # Base64 image upload
+    ├── utils/
+    │   ├── session.ts         # UUID session management (localStorage)
+    │   └── cn.ts              # Tailwind class merge utility
+    └── .env.local             # FASTAPI_URL=http://localhost:8000
+```
+
+---
+
+## Setup
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- Supabase project with pgvector enabled
+- Google Gemini API key
+
+### 1. Clone and configure environment
 
 ```bash
-cd zeus-ai-service
-python ingest_embeddings.py
+git clone https://github.com/stromblack29/zeus-agentic-rag-ai.git
+cd zeus-agentic-rag-ai
 ```
 
-This will:
-- Fetch all policy documents without embeddings
-- Generate embeddings using Google's `gemini-embedding-001` model
-- Update the database with 2000-dimension vectors
-- Enable semantic search on the new content
-
-**Expected Output:**
-```
-Processing 40+ documents...
-Embedding document 1/40...
-Embedding document 2/40...
-...
-All embeddings updated successfully!
-```
-
-### Step 3: Verify Environment Variables
-
-Ensure your `.env` file contains:
-
+**Backend** (`zeus-ai-service/.env`):
 ```env
-GEMINI_API_KEY=your_google_api_key_here
+GEMINI_API_KEY=your_gemini_api_key
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_KEY=your_service_key_here
-OPENROUTER_API_KEY=your_openrouter_key_here  # Optional
+SUPABASE_SERVICE_KEY=your_service_role_key
+OPENROUTER_API_KEY=your_openrouter_key   # optional
 ```
 
-### Step 4: Test the System
+**Frontend** (`zeus-web-chat/.env.local`):
+```env
+FASTAPI_URL=http://localhost:8000
+```
 
-Start the FastAPI server:
+### 2. Initialize Supabase Database
+
+1. Open your Supabase project → **SQL Editor**
+2. Paste and run the full contents of `zeus-ai-service/init_supabase_v2.sql`
+3. Verify tables exist:
+
+| Table | Records |
+|---|---|
+| `car_brands` | 20 brands |
+| `car_models` | 100+ models (2024-2025) |
+| `insurance_plans` | 4 plans |
+| `plan_coverages` | Coverage limits |
+| `plan_premiums` | Premium matrix |
+| `policy_documents` | 65+ RAG docs (embeddings NULL initially) |
+| `quotations` | Empty (created by AI) |
+| `orders` | Empty (created by AI) |
+| `chat_sessions` | Empty (populated on use) |
+
+### 3. Ingest RAG Embeddings
 
 ```bash
 cd zeus-ai-service
-python -m uvicorn main:app --reload --port 8000
+pip install -r requirements.txt
+
+# Embed all new documents (default — skips already-embedded)
+python ingest_embeddings.py
+
+# Force re-embed everything
+python ingest_embeddings.py --force
+
+# Embed only new Coverage documents
+python ingest_embeddings.py --section Coverage
 ```
 
-#### Test 1: Basic Quotation Search
+### 4. Start FastAPI backend
+
 ```bash
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "I want insurance for Honda Civic e:HEV RS 2024",
-    "llm_model": "gemini-2.5-flash"
-  }'
+cd zeus-ai-service
+uvicorn main:app --reload --port 8000
 ```
 
-**Expected Response:**
-- AI should call `search_quotation_details` with split parameters
-- Return multiple plan options (Type 1, Type 2+, Type 3+)
-- Display premiums and deductibles
+API docs available at: `http://localhost:8000/docs`
 
-#### Test 2: Policy Questions
+### 5. Start Next.js frontend
+
 ```bash
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Does Type 1 cover flood damage?",
-    "llm_model": "gemini-2.5-flash"
-  }'
+cd zeus-web-chat
+npm install
+npm run dev
 ```
 
-**Expected Response:**
-- AI should call `search_policy_documents` with query
-- Return relevant policy excerpts about flood coverage
-- Cite specific coverage details
+Open: `http://localhost:3000`
 
-#### Test 3: Create Quotation
-```bash
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "session_id": "test-session-123",
-    "message": "I want to proceed with Zeus Comprehensive Plus for the Civic",
-    "llm_model": "gemini-2.5-flash"
-  }'
-```
+---
 
-**Expected Response:**
-- AI should ask for customer details (name, email, phone)
-- After receiving details, call `create_quotation` tool
-- Return quotation number (format: QT-YYYYMMDD-XXXX)
-- Display validity period (30 days from creation)
+## API Reference
 
-#### Test 3b: Create Order from Quotation
-```bash
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "session_id": "test-session-123",
-    "message": "I want to buy this insurance, please proceed with payment",
-    "llm_model": "gemini-2.5-flash"
-  }'
-```
+### POST `/api/chat` — JSON (Postman-friendly)
 
-**Expected Response:**
-- AI should call `create_order` with the quotation_id
-- Ask for payment method preference
-- Return order number (format: ORD-YYYYMMDD-XXXX)
-- Display payment instructions based on selected method
-- Show policy number and coverage dates
-- Policy status will be "inactive" until payment confirmed
-
-#### Test 3c: Check Order Status
-```bash
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "What is the status of order ORD-20240228-A1B2?",
-    "llm_model": "gemini-2.5-flash"
-  }'
-```
-
-**Expected Response:**
-- AI should call `get_order_status` with order number
-- Return payment status, policy status, and order details
-
-#### Test 4: Alternative LLM Models
-```bash
-# Test with Gemma 3 27B
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Show me insurance for Toyota Camry",
-    "llm_model": "gemma-3-27b"
-  }'
-
-# Test with OpenRouter (Qwen 3)
-curl -X POST http://localhost:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "What are the exclusions for Type 2+ insurance?",
-    "llm_model": "openrouter"
-  }'
-```
-
-### Step 5: Monitor Logs
-
-Watch the console for debug logs:
-
-```
-[TOOL] search_quotation_details → brand='Honda', model='Civic', sub_model='e:HEV RS', year=2024
-
-[RAG TOOL START] Received query: 'flood coverage' | Section filter: Coverage
-[RAG TOOL] Getting embeddings for query...
-[RAG TOOL] Query embedded. Sending RPC call to Supabase...
-[RAG TOOL] RPC response received. Number of raw matches: 3
-[RAG TOOL END] Processed 3 document(s) for LLM analysis.
-
-[CREATE QUOTATION] Starting quotation creation for session test-session-123
-[CREATE QUOTATION] Car Model ID: 2, Plan ID: 1
-[CREATE QUOTATION] Found details: Honda Civic e:HEV RS - Zeus Comprehensive Plus
-[CREATE QUOTATION] SUCCESS: Quotation created with ID abc-123-def
-```
-
-## Database Schema Reference
-
-### Quotations Table
-```sql
-CREATE TABLE quotations (
-    id UUID PRIMARY KEY,
-    session_id UUID NOT NULL,
-    car_model_id INT REFERENCES car_models(id),
-    plan_id INT REFERENCES insurance_plans(id),
-    customer_name VARCHAR(200),
-    customer_email VARCHAR(200),
-    customer_phone VARCHAR(50),
-    car_estimated_price NUMERIC(12, 2),
-    base_premium NUMERIC(12, 2),
-    deductible NUMERIC(12, 2),
-    total_premium NUMERIC(12, 2),
-    quotation_number VARCHAR(50) UNIQUE,
-    valid_until TIMESTAMPTZ,
-    status VARCHAR(50), -- draft, sent, accepted, expired
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-### Orders Table
-```sql
-CREATE TABLE orders (
-    id UUID PRIMARY KEY,
-    quotation_id UUID REFERENCES quotations(id),
-    order_number VARCHAR(50) UNIQUE,
-    payment_status VARCHAR(50), -- pending, paid, failed, refunded
-    payment_method VARCHAR(50),
-    payment_date TIMESTAMPTZ,
-    policy_number VARCHAR(50) UNIQUE,
-    policy_start_date DATE,
-    policy_end_date DATE,
-    policy_status VARCHAR(50), -- inactive, active, cancelled, expired
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-## API Endpoints
-
-### POST /api/chat
-Main chat endpoint with LLM selection.
-
-**Request:**
 ```json
 {
-  "session_id": "uuid-string",
-  "message": "user message",
-  "image_base64": "optional-base64-image",
-  "llm_model": "gemini-2.5-flash" // or "gemma-3-27b", "ollama", "openrouter"
+  "session_id": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Honda Civic e:HEV RS 2024 ประกันชั้น 1 เท่าไร?",
+  "image_base64": null,
+  "llm_model": "gemini-2.5-flash"
 }
 ```
 
 **Response:**
 ```json
 {
-  "session_id": "uuid-string",
-  "reply": "AI response",
+  "session_id": "550e8400-...",
+  "reply": "สำหรับ Honda Civic e:HEV RS 2024 ประกันชั้น 1...",
   "model_used": "gemini-2.5-flash"
 }
 ```
 
-### GET /health
-Health check endpoint.
+### POST `/api/chat/stream` — Server-Sent Events
 
-**Response:**
-```json
-{
-  "status": "ok",
-  "service": "zeus-ai-service"
-}
+Same request body as above. Returns `text/event-stream`:
+
+```
+data: {"token": "สำหรับ"}
+data: {"token": " Honda"}
+data: {"tool_start": "search_quotation_details"}
+data: {"tool_end": "search_quotation_details"}
+data: {"token": " Civic..."}
+data: {"done": true, "session_id": "...", "model_used": "gemini-2.5-flash"}
 ```
 
-## Tools Available to AI
+### GET `/health`
+```json
+{"status": "ok", "service": "zeus-ai-service"}
+```
 
-### 1. search_quotation_details
-Searches car models and insurance plans.
+---
 
-**Parameters:**
-- `brand` (optional): Car brand (e.g., "Honda")
-- `model` (optional): Car model (e.g., "Civic")
-- `sub_model` (optional): Trim level (e.g., "e:HEV RS")
-- `year` (optional): Year (e.g., 2024)
+## Complete Order Workflow Example
 
-### 2. search_policy_documents
-Semantic search on policy documents.
+```
+User: ต้องการประกันรถ Honda Civic e:HEV RS 2024
+  → Agent calls search_quotation_details(brand="Honda", model="Civic", sub_model="e:HEV RS")
+  → Agent calls search_policy_documents(query="Type 1 coverage")
+  → Agent presents 3 plan options with premiums
 
-**Parameters:**
-- `query` (required): Natural language question
-- `section` (optional): Filter by "Coverage", "Exclusion", "Condition", "Definition"
+User: เลือกแผน Zeus Comprehensive Plus ชื่อ สมชาย อีเมล test@example.com
+  → Agent calls create_quotation(car_model_id=2, plan_id=1, customer_name="สมชาย", ...)
+  → Returns: QUO-20240301-0001, valid 30 days, premium 25,000 THB
 
-### 3. create_quotation
-Creates official quotation after plan selection.
+User: ต้องการซื้อเลย จ่ายด้วย PromptPay
+  → Agent calls create_order(quotation_id="...", payment_method="promptpay")
+  → Returns: ORD-20240301-0001, PromptPay QR, policy number POL-20240301-0001
 
-**Parameters:**
-- `session_id` (required): Current session UUID
-- `car_model_id` (required): ID from search results
-- `plan_id` (required): ID from search results
-- `customer_name` (optional): Customer name
-- `customer_email` (optional): Customer email
-- `customer_phone` (optional): Customer phone
+User: ชำระเงินแล้ว
+  → Agent calls get_order_status(order_number="ORD-20240301-0001")
+  → Returns current payment_status and policy_status
+```
 
-### 4. create_order
-Creates an order from an accepted quotation to initiate purchase.
+---
 
-**Parameters:**
-- `quotation_id` (required): UUID of the quotation
-- `payment_method` (optional): "credit_card", "bank_transfer", "promptpay", or "pending"
+## Testing with curl / Postman
 
-**Returns:**
-- Order number, payment instructions, policy number, policy dates
+### JSON endpoint (non-streaming)
+```bash
+curl -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "test-001",
+    "message": "ประกันชั้น 1 Honda Civic e:HEV RS 2024 เท่าไร?",
+    "llm_model": "gemini-2.5-flash"
+  }'
+```
 
-### 5. update_order_payment
-Updates payment status and activates policy (admin function).
+### SSE streaming endpoint
+```bash
+curl -N -X POST http://localhost:8000/api/chat/stream \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "test-001",
+    "message": "แนะนำประกันสำหรับ Tesla Model Y 2024",
+    "llm_model": "gemini-2.5-flash"
+  }'
+```
 
-**Parameters:**
-- `order_id` (required): UUID of the order
-- `payment_status` (required): "paid", "failed", or "refunded"
-- `payment_date` (optional): ISO format date
+### Next.js proxy (streaming, from browser/Postman)
+```bash
+curl -N -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sessionId": "test-001",
+    "message": "BYD Seal ประกันชั้น 1 ราคาเท่าไร?",
+    "llmModel": "gemini-2.5-flash",
+    "stream": true
+  }'
+```
 
-**Returns:**
-- Updated order status, policy activation confirmation
+> **Postman tip:** For SSE, set the request to POST, add `stream: true` in the JSON body, and check the response in the **Console** tab (not Body) to see tokens arrive in real time.
 
-### 6. get_order_status
-Retrieves current status of an order.
-
-**Parameters:**
-- `order_number` (required): Order number (e.g., "ORD-20240228-A1B2")
-
-**Returns:**
-- Order details, payment status, policy status, dates
+---
 
 ## Troubleshooting
 
-### Issue: Embeddings not working
-**Solution:** Verify the `policy_documents` table has `embedding` column of type `VECTOR(2000)` and run `ingest_embeddings.py` again.
-
-### Issue: Quotation creation fails
-**Solution:** Check that `quotations` table exists and has proper foreign key constraints to `car_models` and `insurance_plans`.
-
-### Issue: LLM not finding cars
-**Solution:** Check logs for the exact parameters being passed to `search_quotation_details`. Ensure the AI is splitting brand/model/sub_model correctly.
-
-### Issue: OpenRouter not working
-**Solution:** Verify `OPENROUTER_API_KEY` is set in `.env` and the model name `qwen/qwen3-235b-a22b-thinking-2507` is correct.
-
-## Next Steps
-
-1. **Add Payment Integration**: Implement payment processing for orders table
-2. **Email Notifications**: Send quotation PDFs to customer email
-3. **Policy Generation**: Auto-generate policy documents after payment
-4. **Admin Dashboard**: Build UI to manage quotations and orders
-5. **Analytics**: Track conversion rates, popular models, etc.
-
-## Support
-
-For issues or questions:
-- Check server logs for detailed error messages
-- Verify Supabase connection and RLS policies
-- Test tools individually using the debug endpoints
-- Review the system prompt in `agent.py` for AI behavior rules
+| Issue | Solution |
+|---|---|
+| Embeddings missing | Run `python ingest_embeddings.py`; check `VECTOR(2000)` column exists |
+| LLM not splitting brand/model | Check `agent.py` system prompt for split instructions |
+| CORS error from browser | Confirm `allow_origins` in `main.py` includes `http://localhost:3000` |
+| OpenRouter not responding | Verify `OPENROUTER_API_KEY` in `.env` |
+| Streaming shows no tokens | Check FastAPI logs; ensure `astream_events` version is `v2` |
+| Next.js build fails | Run `npm run build` in `zeus-web-chat/`; check for missing packages |

@@ -358,6 +358,85 @@ INSERT INTO plan_coverages (plan_id, coverage_type, coverage_limit) VALUES
     ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), 'Third Party Bodily Injury', 300000.00),
     ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), 'Medical Expenses (Driver/Passenger)', 30000.00);
 
+-- ============================================================
+-- Additional Car Models (2024-2025)
+-- ============================================================
+
+-- Ford Models (4 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Ford'), 'Ranger', 'Wildtrak 2.0 Bi-Turbo 4WD', 2024, 1279000.00),
+    ((SELECT id FROM car_brands WHERE name='Ford'), 'Ranger', 'Raptor 3.0 V6', 2024, 1959000.00),
+    ((SELECT id FROM car_brands WHERE name='Ford'), 'Everest', 'Titanium+ 4WD', 2024, 1999000.00),
+    ((SELECT id FROM car_brands WHERE name='Ford'), 'Everest', 'Sport 4WD', 2024, 1799000.00);
+
+-- Hyundai Models (5 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Hyundai'), 'IONIQ 5', 'Long Range AWD', 2024, 2299000.00),
+    ((SELECT id FROM car_brands WHERE name='Hyundai'), 'IONIQ 6', 'Long Range AWD', 2024, 2399000.00),
+    ((SELECT id FROM car_brands WHERE name='Hyundai'), 'Tucson', 'Hybrid Premium', 2024, 1699000.00),
+    ((SELECT id FROM car_brands WHERE name='Hyundai'), 'Creta', 'Sport', 2024, 899000.00),
+    ((SELECT id FROM car_brands WHERE name='Hyundai'), 'Staria', 'Premium', 2024, 1899000.00);
+
+-- Subaru Models (3 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Subaru'), 'Forester', 'Advance', 2024, 1799000.00),
+    ((SELECT id FROM car_brands WHERE name='Subaru'), 'XV', 'GT Edition', 2024, 1499000.00),
+    ((SELECT id FROM car_brands WHERE name='Subaru'), 'Outback', '2.5i-T EyeSight', 2024, 2099000.00);
+
+-- Suzuki Models (3 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Suzuki'), 'Swift', 'GLX', 2024, 639000.00),
+    ((SELECT id FROM car_brands WHERE name='Suzuki'), 'Ertiga', 'GX', 2024, 759000.00),
+    ((SELECT id FROM car_brands WHERE name='Suzuki'), 'Vitara', '1.4 Turbo GLX', 2024, 1099000.00);
+
+-- Audi Models (3 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Audi'), 'A4', '40 TFSI S line', 2024, 2799000.00),
+    ((SELECT id FROM car_brands WHERE name='Audi'), 'Q5', '45 TFSI quattro S line', 2024, 3499000.00),
+    ((SELECT id FROM car_brands WHERE name='Audi'), 'e-tron', 'Q8 55 quattro', 2024, 5499000.00);
+
+-- Porsche Models (3 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Porsche'), 'Cayenne', 'S E-Hybrid', 2024, 6999000.00),
+    ((SELECT id FROM car_brands WHERE name='Porsche'), 'Macan', 'T', 2024, 4499000.00),
+    ((SELECT id FROM car_brands WHERE name='Porsche'), 'Taycan', '4S', 2024, 7299000.00);
+
+-- Volvo Models (3 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Volvo'), 'XC40', 'Recharge Twin Pure Electric', 2024, 2799000.00),
+    ((SELECT id FROM car_brands WHERE name='Volvo'), 'XC60', 'Recharge Plug-in T8', 2024, 3399000.00),
+    ((SELECT id FROM car_brands WHERE name='Volvo'), 'C40', 'Recharge Twin', 2024, 2999000.00);
+
+-- Chevrolet Models (2 variants)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Chevrolet'), 'Colorado', 'LTZ Z71 4WD', 2024, 1199000.00),
+    ((SELECT id FROM car_brands WHERE name='Chevrolet'), 'Trailblazer', 'LTZ AWD', 2024, 1299000.00);
+
+-- Nissan extra models
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Nissan'), 'Navara', 'Pro-4X 4WD', 2024, 1099000.00),
+    ((SELECT id FROM car_brands WHERE name='Nissan'), 'Almera', 'VL Turbo CVT', 2024, 699000.00);
+
+-- Mitsubishi extra models
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Mitsubishi'), 'Eclipse Cross', 'PHEV', 2024, 1999000.00),
+    ((SELECT id FROM car_brands WHERE name='Mitsubishi'), 'Outlander', 'PHEV', 2024, 2199000.00);
+
+-- 2025 model year variants (key bestsellers)
+INSERT INTO car_models (brand_id, name, sub_model, year, estimated_price) VALUES
+    ((SELECT id FROM car_brands WHERE name='Honda'), 'Civic', 'e:HEV RS', 2025, 1749000.00),
+    ((SELECT id FROM car_brands WHERE name='Honda'), 'CR-V', 'e:HEV EL', 2025, 1749000.00),
+    ((SELECT id FROM car_brands WHERE name='Toyota'), 'Camry', 'Hybrid Premium', 2025, 1649000.00),
+    ((SELECT id FROM car_brands WHERE name='Toyota'), 'Corolla Cross', 'Hybrid Premium', 2025, 1249000.00),
+    ((SELECT id FROM car_brands WHERE name='Toyota'), 'Fortuner', 'Legender', 2025, 1929000.00),
+    ((SELECT id FROM car_brands WHERE name='BYD'), 'Seal', 'Premium', 2025, 1499000.00),
+    ((SELECT id FROM car_brands WHERE name='BYD'), 'Atto 3', 'Extended Range', 2025, 1149000.00),
+    ((SELECT id FROM car_brands WHERE name='Tesla'), 'Model 3', 'Long Range', 2025, 1949000.00),
+    ((SELECT id FROM car_brands WHERE name='Tesla'), 'Model Y', 'Long Range', 2025, 2149000.00),
+    ((SELECT id FROM car_brands WHERE name='MG'), 'MG4 EV', 'Long Range', 2025, 1149000.00),
+    ((SELECT id FROM car_brands WHERE name='BMW'), '3 Series', '330e M Sport', 2025, 3149000.00),
+    ((SELECT id FROM car_brands WHERE name='Mazda'), 'CX-5', '2.5 Turbo SP', 2025, 1849000.00);
+
 -- Note: Premium matrix will be generated programmatically based on vehicle price tiers
 -- For brevity, showing sample premiums for key models. In production, use a pricing algorithm.
 
@@ -435,6 +514,121 @@ INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALU
     ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='C 350e AMG Dynamic' AND name='C-Class'), 20000.00, 5000.00),
     -- Mercedes E-Class
     ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='E 300e AMG Dynamic' AND name='E-Class'), 65000.00, 5000.00);
+
+-- Ford Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD'), 22000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD'), 11000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Wildtrak 2.0 Bi-Turbo 4WD'), 8500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Raptor 3.0 V6'), 35000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Raptor 3.0 V6'), 18000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD'), 34000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD'), 17500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Titanium+ 4WD'), 13000.00, 3000.00);
+
+-- Hyundai Models (EV/Hybrid via EV Shield; ICE via standard plans)
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 5'), 50000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 5'), 48000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 6'), 52000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Long Range AWD' AND name='IONIQ 6'), 50000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Tucson'), 28000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Hybrid Premium' AND name='Tucson'), 14500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta'), 16000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta'), 8500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Sport' AND name='Creta'), 6500.00, 2000.00);
+
+-- Subaru Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester'), 30000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester'), 15500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Advance' AND name='Forester'), 11500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GT Edition' AND name='XV'), 25000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GT Edition' AND name='XV'), 13000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='2.5i-T EyeSight'), 35000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='2.5i-T EyeSight'), 18000.00, 2000.00);
+
+-- Suzuki Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift'), 13000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift'), 7000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='GLX' AND name='Swift'), 5500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga'), 14500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga'), 7500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='GX' AND name='Ertiga'), 5800.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='1.4 Turbo GLX'), 18500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='1.4 Turbo GLX'), 9500.00, 2000.00);
+
+-- Audi Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line'), 45000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line'), 22000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='40 TFSI S line'), 17000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='45 TFSI quattro S line'), 58000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='45 TFSI quattro S line'), 29000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Q8 55 quattro'), 95000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Q8 55 quattro'), 92000.00, 5000.00);
+
+-- Porsche Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='S E-Hybrid'), 115000.00, 10000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='T' AND name='Macan'), 75000.00, 8000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='4S'), 125000.00, 10000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='4S'), 120000.00, 10000.00);
+
+-- Volvo EV/PHEV Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin Pure Electric'), 55000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin Pure Electric'), 52000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Plug-in T8'), 60000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Plug-in T8'), 57000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin' AND name='C40'), 58000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Recharge Twin' AND name='C40'), 55000.00, 3000.00);
+
+-- Chevrolet Models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD'), 21000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD'), 10500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='LTZ Z71 4WD'), 8000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='LTZ AWD'), 22500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='LTZ AWD'), 11500.00, 2000.00);
+
+-- Extra Nissan and Mitsubishi models
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD'), 19500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD'), 9500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='Pro-4X 4WD'), 7500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT'), 13500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT'), 7000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE sub_model='VL Turbo CVT'), 5500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Eclipse Cross'), 36000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Eclipse Cross'), 18000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Outlander'), 39000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE sub_model='PHEV' AND name='Outlander'), 20000.00, 3000.00);
+
+-- 2025 Model Year Premiums
+INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025), 26000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025), 13500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Civic' AND sub_model='e:HEV RS' AND year=2025), 10000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='CR-V' AND sub_model='e:HEV EL' AND year=2025), 28000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='CR-V' AND sub_model='e:HEV EL' AND year=2025), 14500.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025), 27000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025), 14000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Camry' AND sub_model='Hybrid Premium' AND year=2025), 10500.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025), 31000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025), 16000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='Fortuner' AND sub_model='Legender' AND year=2025), 12000.00, 3000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Seal' AND sub_model='Premium' AND year=2025), 33500.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Atto 3' AND sub_model='Extended Range' AND year=2025), 24000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Model 3' AND sub_model='Long Range' AND year=2025), 43000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='Model Y' AND sub_model='Long Range' AND year=2025), 47000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus EV Shield'), (SELECT id FROM car_models WHERE name='MG4 EV' AND sub_model='Long Range' AND year=2025), 27000.00, 0.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='3 Series' AND sub_model='330e M Sport' AND year=2025), 51000.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='3 Series' AND sub_model='330e M Sport' AND year=2025), 25500.00, 5000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Comprehensive Plus'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025), 31000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Value Protect'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025), 16000.00, 2000.00),
+    ((SELECT id FROM insurance_plans WHERE plan_name='Zeus Budget Safe'), (SELECT id FROM car_models WHERE name='CX-5' AND sub_model='2.5 Turbo SP' AND year=2025), 12000.00, 3000.00);
 
 -- Popular SUVs and Pickups
 INSERT INTO plan_premiums (plan_id, car_model_id, base_premium, deductible) VALUES
@@ -520,3 +714,51 @@ INSERT INTO policy_documents (plan_type, section, content, metadata) VALUES
     ('Type 1', 'Condition', 'Agreed Value vs Market Value: Type 1 policies can be issued on agreed value basis (value agreed at inception, no depreciation) or market value basis (value adjusted annually). Agreed value policies have 10-15% higher premium but provide better protection against depreciation.', '{"topic": "agreed_value", "page": 31}'),
     ('All', 'Condition', 'Young Driver Surcharge: Drivers under 25 years old incur additional premium of 20-50% depending on age and driving experience. Surcharge waived if driver has completed approved defensive driving course and has clean driving record for 2+ years.', '{"topic": "young_driver", "page": 32}'),
     ('All', 'Condition', 'High-Performance Vehicle Conditions: Vehicles with engine capacity over 3.0L or power output over 300hp require special underwriting. Additional premium 30-100%. May require installation of GPS tracker and parking in secured location overnight. Some insurers may decline coverage.', '{"topic": "high_performance", "page": 33}');
+
+-- ============================================================
+-- Additional RAG Documents: EV/PHEV, Pricing, Brand-Specific, Scenarios
+-- ============================================================
+INSERT INTO policy_documents (plan_type, section, content, metadata) VALUES
+
+    -- EV and PHEV specific coverage
+    ('Type 1', 'Coverage', 'PHEV and Hybrid Battery Coverage: Plug-in hybrid (PHEV) and hybrid vehicles have their high-voltage battery pack covered under Zeus Comprehensive Plus and Zeus EV Shield plans. Accidental damage to the hybrid system, inverter, and electric motor is included. Thermal runaway caused by external impact is covered. Gradual degradation and manufacturer defects are excluded and fall under manufacturer warranty.', '{"topic": "phev_hybrid_battery", "page": 6}'),
+    ('Type 1', 'Coverage', 'EV Charging Infrastructure: Under Zeus EV Shield plan, damage to the vehicle''s onboard charger caused by power surge or faulty charging equipment is covered up to 80,000 THB. Wall-mounted home chargers (EVSE) are covered up to 50,000 THB when damage is caused by fire or flooding. Public charging station damage liability is covered under third-party liability.', '{"topic": "ev_charging", "page": 6}'),
+    ('Type 1', 'Coverage', 'Electric Vehicle Towing: All EV and PHEV vehicles covered under Zeus plans receive priority towing with flatbed truck service (not wheel-lift) to protect the battery and drivetrain. EV-specific technician dispatched to scene for safety assessment before towing. Service available 24/7 across all provinces in Thailand.', '{"topic": "ev_towing", "page": 9}'),
+
+    -- Pricing and premium factors
+    ('All', 'Condition', 'Premium Calculation Factors: Car insurance premiums in Thailand are calculated based on multiple factors: (1) Vehicle sum insured value, (2) Plan type (Type 1 is most expensive, Type 3+ is cheapest), (3) Driver age and experience, (4) Garage location and province, (5) Vehicle usage (personal/commercial), (6) Claims history and No-Claims Discount, (7) Safety features (ADAS, dash cam discount available). EV vehicles carry slightly higher premiums due to repair costs.', '{"topic": "premium_calculation", "page": 2}'),
+    ('All', 'Condition', 'Premium Pricing Tiers by Vehicle Value: Zeus Insurance uses the following base rate structure: Vehicles under 500,000 THB: Type 1 rate 1.8-2.2%, Type 2+ rate 1.0-1.2%, Type 3+ rate 0.6-0.8%. Vehicles 500,000-1,500,000 THB: Type 1 rate 1.5-1.8%, Type 2+ rate 0.8-1.0%, Type 3+ rate 0.5-0.7%. Vehicles over 1,500,000 THB: Type 1 rate 1.3-1.6%, Type 2+ rate 0.7-0.9%, Type 3+ rate 0.4-0.6%. Luxury and exotic cars over 4,000,000 THB: special rates apply, minimum 1.5%.', '{"topic": "pricing_tiers", "page": 2}'),
+    ('All', 'Condition', 'Dash Camera Discount: Vehicles equipped with a front-facing dashboard camera with continuous recording capability are eligible for a 3-5% discount on premium. Camera footage must be submitted for at-fault claims. Zeus Insurance partners with approved dash cam brands for discounted installation packages. Rear dash cam provides additional 1% discount.', '{"topic": "dashcam_discount", "page": 33}'),
+    ('All', 'Condition', 'ADAS Safety Feature Discount: Vehicles equipped with Advanced Driver Assistance Systems (ADAS) including Autonomous Emergency Braking (AEB), Lane Departure Warning, and Adaptive Cruise Control are eligible for 5-8% premium discount. Must be factory-installed. Vehicles with full ADAS suite (AEB + Lane Keep Assist + Blind Spot Monitor) receive maximum 8% discount.', '{"topic": "adas_discount", "page": 33}'),
+
+    -- Claim scenarios
+    ('All', 'Condition', 'Hit and Run Accident Scenario: If your vehicle is damaged by an unidentified hit-and-run driver: Under Type 1 — fully covered as own damage claim, deductible applies. Under Type 2+ and Type 3+ — NOT covered because the third party cannot be identified. This is one of the key advantages of upgrading to Type 1. Police report must be filed within 24 hours to support the claim.', '{"topic": "hit_and_run", "page": 8}'),
+    ('All', 'Condition', 'Flooding Scenario — Driving into Flooded Road: If a driver knowingly drives into a visibly flooded road and the engine is damaged (hydro-lock), this may be considered negligence and the claim could be denied. However, if the vehicle was stationary and flood water rose around it, or the driver was unaware of depth, the claim is covered under flood coverage. Assessor will evaluate circumstances. Type 2+ and 3+ do not cover flood damage.', '{"topic": "flood_scenario", "page": 12}'),
+    ('All', 'Condition', 'Parking Lot Damage: Damage caused by unknown vehicles in parking lots is covered under Type 1 as own damage. CCTV footage from the parking facility is recommended to support the claim. If the responsible party is identified, the claim proceeds as a third-party claim (covered under all plan types). Scratches and dents from parking lot incidents have a minimum damage threshold of 3,000 THB to file a claim.', '{"topic": "parking_damage", "page": 11}'),
+    ('All', 'Condition', 'Animal Collision: Collision with animals (stray dogs, cats, livestock, deer) is covered as own damage under Type 1 only. Type 2+ and Type 3+ do not cover animal collisions as they require another identifiable vehicle. Police or wildlife department report recommended for claims over 20,000 THB. Insured sum applies minus deductible.', '{"topic": "animal_collision", "page": 11}'),
+
+    -- Brand-specific notes
+    ('Type 1', 'Coverage', 'Tesla Model Coverage Notes: Tesla vehicles require specialized repair at authorized Tesla Service Centers or certified body shops with Tesla-approved parts. Zeus EV Shield guarantees use of genuine Tesla replacement parts. Over-the-air software updates do not affect coverage. Autopilot-related accidents are covered under standard collision terms — autonomous driving mode does not void coverage if the driver was legally supervising.', '{"topic": "tesla_coverage", "page": 6}'),
+    ('Type 1', 'Coverage', 'BYD Vehicle Coverage: BYD vehicles (Seal, Atto 3, Dolphin) are covered under Zeus EV Shield with access to BYD-authorized repair centers across Thailand. Blade Battery technology damage from external impact is covered. BYD''s proprietary charging systems and DiLink infotainment damage from accident is covered. BYD Han and Tang models covered with special luxury EV endorsement.', '{"topic": "byd_coverage", "page": 6}'),
+    ('Type 1', 'Coverage', 'Hybrid Vehicle Repair: Toyota hybrid vehicles (Camry Hybrid, Corolla Cross Hybrid, Yaris Cross Hybrid) and Honda hybrid vehicles (Civic e:HEV, HR-V e:HEV) require specialized hybrid technicians for high-voltage component repair. Zeus Insurance partners with Toyota and Honda authorized service centers. Hybrid-specific repairs are fully covered under Zeus Comprehensive Plus at no extra charge.', '{"topic": "hybrid_repair", "page": 6}'),
+
+    -- Exclusions additional
+    ('All', 'Exclusion', 'Rideshare and Delivery Exclusion Details: Using a personal vehicle registered under a personal insurance policy for Grab, Bolt, InDrive, Lalamove, Lineman, or any for-hire transportation service immediately voids coverage during the period of commercial use. Zeus Insurance offers a Rideshare Endorsement add-on for drivers who occasionally use vehicles for rideshare, covering up to 20 ride hours per week for additional 15% premium.', '{"topic": "rideshare_exclusion", "page": 13}'),
+    ('All', 'Exclusion', 'Intentional Damage Exclusion: Any damage intentionally caused by the policyholder, driver, or authorized user is strictly excluded. Insurance fraud is a criminal offense under Thai law. Suspicious claims may be investigated by the Anti-Fraud Unit. Proven fraud results in policy cancellation, claim recovery, and potential criminal prosecution.', '{"topic": "fraud_exclusion", "page": 15}'),
+    ('All', 'Exclusion', 'Mechanical Breakdown vs Accident: Pure mechanical or electrical breakdown not caused by an external accident is not covered. For example: engine failure due to lack of oil, transmission failure, alternator failure, or EV battery management system failure from software issues. These are manufacturer warranty or extended warranty matters. However, if a mechanical failure causes an accident resulting in vehicle damage, the resulting damage IS covered.', '{"topic": "mechanical_breakdown", "page": 14}'),
+
+    -- Thai language context documents
+    ('All', 'Coverage', 'ประกันชั้น 1 (Type 1 Insurance): ประกันภัยรถยนต์ชั้น 1 คือความคุ้มครองที่ครอบคลุมมากที่สุด ครอบคลุมความเสียหายของรถยนต์ของท่านเองจากอุบัติเหตุทุกกรณี ไม่ว่าจะเป็นการชน น้ำท่วม ไฟไหม้ การโจรกรรม รวมถึงความรับผิดต่อบุคคลภายนอก เหมาะสำหรับรถยนต์ใหม่หรือรถยนต์ราคาสูง เบี้ยประกันสูงกว่าชั้น 2+ และ 3+ แต่ให้ความคุ้มครองสูงสุด', '{"topic": "type1_thai", "language": "th", "page": 1}'),
+    ('All', 'Coverage', 'ประกันชั้น 2+ (Type 2+ Insurance): ประกันภัยรถยนต์ชั้น 2+ คุ้มครองความเสียหายของรถยนต์ตัวเองเฉพาะกรณีที่ชนกับรถยนต์คันอื่นที่ระบุตัวตนได้เท่านั้น และยังคุ้มครองไฟไหม้และการโจรกรรม เหมาะสำหรับรถยนต์อายุ 3-7 ปี ที่ต้องการความคุ้มครองระดับกลางในราคาที่เหมาะสม ไม่คุ้มครองรถชนแบบไม่มีคู่กรณี', '{"topic": "type2plus_thai", "language": "th", "page": 1}'),
+    ('All', 'Coverage', 'ประกันชั้น 3+ (Type 3+ Insurance): ประกันภัยรถยนต์ชั้น 3+ คุ้มครองความเสียหายของรถยนต์ตัวเองจากการชนกับรถยนต์คันอื่นที่ระบุตัวตนได้ สูงสุด 100,000 บาทต่อครั้ง และคุ้มครองความรับผิดต่อบุคคลภายนอก เบี้ยประกันต่ำที่สุดในบรรดาประกันภัยรถยนต์ เหมาะสำหรับรถยนต์อายุมากหรือผู้ที่ต้องการประหยัดค่าใช้จ่าย', '{"topic": "type3plus_thai", "language": "th", "page": 1}'),
+    ('All', 'Coverage', 'ส่วนลดไม่มีประวัติเคลมหรือ NCD (No-Claims Discount): หากท่านไม่มีการเรียกร้องค่าสินไหมทดแทนในปีที่ผ่านมา ท่านจะได้รับส่วนลดเบี้ยประกันเมื่อต่ออายุกรมธรรม์ โดยส่วนลดจะสะสมตามจำนวนปีที่ไม่มีการเคลม: 1 ปี = 10%, 2 ปี = 20%, 3 ปี = 30%, 4 ปี = 40%, 5 ปีขึ้นไป = 50% สูงสุด หากมีการเคลม NCD จะถูกรีเซ็ตกลับเป็น 0%', '{"topic": "ncd_thai", "language": "th", "page": 7}'),
+    ('All', 'Condition', 'ขั้นตอนการเคลมประกัน (Claims Process Thai): เมื่อเกิดอุบัติเหตุ กรุณาปฏิบัติตามขั้นตอนดังนี้: 1) ถ่ายรูปความเสียหายและสถานที่เกิดเหตุ 2) แจ้งตำรวจและขอสำเนาบันทึกประจำวัน 3) แจ้งบริษัทประกันภายใน 24 ชั่วโมง ผ่านแอปพลิเคชันหรือสายด่วน 4) นำรถเข้าอู่ที่ได้รับการรับรองจากบริษัทประกัน 5) ส่งเอกสารครบถ้วนภายใน 7 วัน ระยะเวลาพิจารณา: เคลมเล็กน้อย 3-5 วันทำการ, เคลมหนัก 15-30 วัน', '{"topic": "claims_process_thai", "language": "th", "page": 18}'),
+
+    -- Order and quotation process
+    ('All', 'Condition', 'Quotation Validity and Acceptance: Insurance quotations generated by Zeus AI are valid for 30 days from the date of issue. The quotation number (format: QUO-YYYYMMDD-XXXX) must be referenced when proceeding to purchase. Premium rates are locked for the quotation validity period. After 30 days, a new quotation must be generated as rates may have changed.', '{"topic": "quotation_validity", "page": 2}'),
+    ('All', 'Condition', 'Policy Inception and Coverage Start: Coverage begins on the policy start date specified in the order, typically 1-7 days after payment confirmation. Same-day coverage available for urgent requests with additional processing fee. The policy document (PDF) is issued within 24 hours of payment confirmation and sent to the registered email. Physical copy dispatched within 7 business days.', '{"topic": "policy_inception", "page": 22}'),
+    ('All', 'Condition', 'Payment Methods for Policy Purchase: Zeus Insurance accepts the following payment methods: (1) PromptPay QR Code — instant confirmation, no processing fee, (2) Bank Transfer — confirmation within 1-2 business hours, (3) Credit/Debit Card (Visa, Mastercard) — instant confirmation, 1.5% processing fee, (4) Installment Plan — available for premiums over 15,000 THB, 3/6/12 months, 0% interest with participating banks.', '{"topic": "payment_methods_order", "page": 29}');
+
+-- ============================================================
+-- End of init_supabase_v2.sql
+-- ============================================================
