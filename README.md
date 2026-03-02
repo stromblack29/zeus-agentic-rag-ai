@@ -39,6 +39,239 @@ A full-stack AI-powered car insurance assistant for the Thai market, built with 
 
 ---
 
+## Tech Stack: LangChain & LangGraph
+
+Zeus AI Service is built on the **LangChain** and **LangGraph** ecosystem, providing a robust agentic framework for tool-calling, memory management, and streaming responses.
+
+### Core Components
+
+#### 1. **LangGraph ReAct Agent** (`langgraph.prebuilt.create_react_agent`)
+The heart of Zeus is a **ReAct (Reasoning + Acting) agent** that follows a thought-action-observation loop:
+
+```python
+from langgraph.prebuilt import create_react_agent
+
+agent_executor = create_react_agent(
+    llm=llm,
+    tools=[search_quotation_details, search_policy_documents, 
+           create_quotation, create_order, update_order_payment, 
+           get_order_status],
+    prompt=SYSTEM_PROMPT
+)
+```
+
+**How it works:**
+1. **Reasoning**: Agent analyzes user request and decides which tool(s) to call
+2. **Acting**: Executes tool calls with extracted parameters
+3. **Observation**: Processes tool results and formulates response
+4. **Iteration**: Repeats until task is complete or max iterations reached
+
+#### 2. **LangChain Tool Integration** (`@tool` decorator)
+All Zeus tools are LangChain-native functions using the `@tool` decorator:
+
+```python
+from langchain_core.tools import tool
+
+@tool
+def search_quotation_details(
+    brand: str,
+    model: str | None = None,
+    sub_model: str | None = None,
+    year: int | None = None
+) -> str:
+    """Search for car insurance quotations by vehicle details."""
+    # Tool implementation with Supabase queries
+    return json.dumps(results)
+```
+
+**Benefits:**
+- Automatic schema generation for LLM function calling
+- Type validation and error handling
+- Seamless integration with LangGraph agent executor
+
+#### 3. **Multi-LLM Support** (LangChain Chat Models)
+Zeus supports multiple LLM providers through LangChain's unified chat interface:
+
+| LangChain Class | Model | Provider |
+|---|---|---|
+| `ChatGoogleGenerativeAI` | `gemini-2.5-flash` | Google AI Studio (default) |
+| `ChatGoogleGenerativeAI` | `gemma-3-27b-it` | Google AI Studio (fallback) |
+| `ChatOllama` | `glm4:9b` | Local Ollama server |
+| `ChatOpenAI` | `qwen3-235b` | OpenRouter API |
+
+**Fallback mechanism:**
+```python
+primary_llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", ...)
+fallback_llm = ChatGoogleGenerativeAI(model="gemma-3-27b-it", ...)
+llm = primary_llm.with_fallbacks([fallback_llm])
+```
+
+#### 4. **Chat History Management** (LangChain Messages)
+Conversation context is maintained using LangChain message types:
+
+```python
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+
+def build_chat_history(raw_history: list[dict]) -> list:
+    messages = []
+    for record in raw_history:
+        if record["role"] == "user":
+            messages.append(HumanMessage(content=record["message"]))
+        elif record["role"] == "ai":
+            messages.append(AIMessage(content=record["message"]))
+    return messages
+```
+
+**Storage flow:**
+1. User message → `HumanMessage` → Agent executor
+2. Agent response → `AIMessage` → Supabase `chat_sessions` table
+3. Next request → Fetch history → Rebuild message list → Agent executor
+
+#### 5. **Multimodal Input** (Vision Support)
+Zeus supports image analysis using LangChain's multimodal message format:
+
+```python
+def build_human_input(text_message: str, image_base64: str | None) -> list | str:
+    if not image_base64:
+        return text_message
+    
+    return [
+        {
+            "type": "image_url",
+            "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}
+        },
+        {
+            "type": "text",
+            "text": text_message or "Please analyze this image..."
+        }
+    ]
+```
+
+**Use cases:**
+- Upload car registration document → Extract brand/model/year
+- Upload damage photos → Assess claim eligibility
+- Upload policy document → Extract coverage details
+
+#### 6. **Streaming with `astream_events`** (LangChain v2 Events)
+Real-time token streaming using LangChain's event-based streaming API:
+
+```python
+async for event in agent_executor.astream_events(
+    {"messages": messages},
+    version="v2"
+):
+    if event["event"] == "on_chat_model_stream":
+        # Stream LLM tokens
+        token = event["data"]["chunk"].content
+        yield f"data: {json.dumps({'token': token})}\n\n"
+    
+    elif event["event"] == "on_tool_start":
+        # Notify tool execution start
+        tool_name = event["name"]
+        yield f"data: {json.dumps({'tool_start': tool_name})}\n\n"
+    
+    elif event["event"] == "on_tool_end":
+        # Notify tool execution end
+        tool_name = event["name"]
+        yield f"data: {json.dumps({'tool_end': tool_name})}\n\n"
+```
+
+**Event types tracked:**
+- `on_chat_model_stream` → Token-by-token LLM output
+- `on_tool_start` → Tool execution begins
+- `on_tool_end` → Tool execution completes
+- `on_chain_end` → Agent execution finished
+
+#### 7. **RAG with LangChain Embeddings**
+Semantic search over policy documents using Google's embedding model:
+
+```python
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
+embeddings_model = GoogleGenerativeAIEmbeddings(
+    model="models/text-embedding-004",
+    google_api_key=os.environ["GEMINI_API_KEY"]
+)
+
+# Generate query embedding
+query_embedding = embeddings_model.embed_query(query_text)
+
+# Trim to 2000 dimensions for Supabase pgvector
+trimmed_embedding = query_embedding[:2000]
+
+# Semantic search via Supabase RPC
+results = supabase.rpc(
+    "match_documents",
+    {
+        "query_embedding": trimmed_embedding,
+        "match_threshold": 0.5,
+        "match_count": 5
+    }
+).execute()
+```
+
+**RAG pipeline:**
+1. User query → `embed_query()` → 768D vector → Trim to 2000D
+2. Supabase `match_documents` RPC → Cosine similarity search
+3. Top-K documents → Injected into LLM context
+4. LLM generates answer grounded in retrieved documents
+
+### LangChain Dependencies
+
+```txt
+langchain              # Core abstractions (BaseMessage, BaseTool, etc.)
+langchain-core         # Message types, runnables, streaming
+langchain-google-genai # Gemini/Gemma chat models + embeddings
+langchain-community    # Community integrations
+langchain-ollama       # Local Ollama support
+langchain-openai       # OpenRouter/OpenAI support
+langgraph              # Agent orchestration framework
+```
+
+### Why LangChain + LangGraph?
+
+| Feature | Benefit |
+|---|---|
+| **Unified LLM Interface** | Switch between Gemini, Ollama, OpenRouter without code changes |
+| **Built-in Tool Calling** | Automatic function schema generation and parameter extraction |
+| **Streaming Events** | Real-time token streaming + tool execution visibility |
+| **Message Abstraction** | Clean separation of user/AI/system messages |
+| **ReAct Agent Pattern** | Proven reasoning loop for complex multi-step tasks |
+| **Fallback Handling** | Automatic failover between LLM providers |
+| **Multimodal Support** | Native image + text input handling |
+| **RAG Integration** | Seamless embedding generation and vector search |
+
+### Agent Execution Flow
+
+```
+User Request
+    ↓
+[1] Build chat history (HumanMessage, AIMessage)
+    ↓
+[2] Create agent executor (LangGraph ReAct)
+    ↓
+[3] Agent reasoning loop:
+    ├─ LLM decides: "Need to call search_quotation_details"
+    ├─ Extract parameters: brand="Honda", model="Civic"
+    ├─ Execute tool → Supabase query
+    ├─ Observe results → 4 matching vehicles found
+    ├─ LLM decides: "Need to call search_policy_documents"
+    ├─ Execute tool → RAG semantic search
+    ├─ Observe results → 3 relevant policy docs
+    └─ LLM generates final answer
+    ↓
+[4] Stream response (astream_events v2)
+    ├─ on_chat_model_stream → Token chunks
+    ├─ on_tool_start → "🔧 Searching quotations..."
+    └─ on_tool_end → "✅ Found 4 results"
+    ↓
+[5] Save to Supabase (chat_sessions table)
+    ↓
+Response to User
+```
+
+---
+
 ## Features
 
 ### AI Agent (LangGraph ReAct)
