@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Zeus: Intelligent Agents Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7; 
+            color: #1E293B;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .active-tab {
+            background-color: #F59E0B;
+            color: white;
+            border-color: #F59E0B;
+        }
+
+        .inactive-tab {
+            background-color: transparent;
+            color: #64748B;
+            border-color: #CBD5E1;
+        }
+
+        .active-eco-card {
+            border-color: #F59E0B;
+            box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1), 0 2px 4px -1px rgba(245, 158, 11, 0.06);
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <!-- Chosen Palette: Warm Neutrals with Amber and Slate Accents (Background: #FDFBF7, Text: #1E293B, Accent: #F59E0B, Secondary: #64748B) -->
+    <!-- Application Structure Plan: The SPA is structured as a linear but interactive narrative journey. It starts with an overview of the core philosophy (ReAct), transitioning into an interactive simulation of the specific use case (Project Zeus), followed by an exploratory breakdown of the technology stack (LangChain Ecosystem), and concludes with an analytical view of the system's impact. This structure guides the user from the "Why" to the "How" and finally the "Impact", making complex architectural concepts digestible. -->
+    <!-- Visualization & Content Choices: 1. Core Philosophy -> Goal: Inform & Compare -> Presentation: Tabbed text interface -> Interaction: Click to toggle -> Justification: Clearly contrasts the problem (Hallucination) with the solution (ReAct). 2. Project Zeus Simulation -> Goal: Demonstrate Process -> Presentation: Dynamic vertical timeline -> Interaction: "Next Step" button -> Justification: Allows users to unfold the AI's internal monologue step-by-step, proving the value of Reason+Act. 3. LangChain Ecosystem -> Goal: Organize & Explain Relationships -> Presentation: Interactive Grid Cards + Detail Panel -> Interaction: Click card to view details -> Justification: Breaks down complex architecture into explorable, bite-sized components. 4. System Impact -> Goal: Analyze Performance -> Presentation: Radar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Visually quantifies the theoretical improvements in reliability and tool usage of the new architecture. Confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased scroll-smooth">
+
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-stone-200 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-bold text-xl tracking-tight text-slate-800 flex items-center gap-2">
+                <span class="text-amber-500 text-2xl">⚡</span> Project Zeus
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                <a href="#philosophy" class="hover:text-amber-500 transition-colors">The ReAct Framework</a>
+                <a href="#simulation" class="hover:text-amber-500 transition-colors">Zeus Simulation</a>
+                <a href="#ecosystem" class="hover:text-amber-500 transition-colors">LangChain Ecosystem</a>
+                <a href="#impact" class="hover:text-amber-500 transition-colors">System Impact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16">
+        <header class="max-w-4xl mx-auto px-6 py-16 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                Intelligent Agents with <span class="text-amber-500">ReAct & LangChain</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
+                Technical Architecture & Concept Brief for <strong>Project Zeus</strong>: An automated AI Pre-Insurance Inspection & Quotation system designed for enterprise-grade reliability.
+            </p>
+        </header>
+
+        <section id="philosophy" class="max-w-5xl mx-auto px-6 py-12">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">The Core Philosophy</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">To build reliable enterprise systems, we must evolve past standard Large Language Models (LLMs) that act as mere autocomplete engines and force the AI to "think" before it speaks.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="flex border-b border-slate-200 bg-slate-50">
+                    <button id="tab-llm" class="flex-1 py-4 px-6 text-sm font-semibold transition-colors active-tab border-b-2">The Problem: Standard LLMs</button>
+                    <button id="tab-react" class="flex-1 py-4 px-6 text-sm font-semibold transition-colors inactive-tab border-b-2">The Solution: ReAct Framework</button>
+                </div>
+                
+                <div class="p-8 min-h-[250px] flex items-center">
+                    <div id="content-llm" class="w-full">
+                        <div class="flex items-start gap-6">
+                            <div class="text-5xl opacity-80">🤖</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Hallucination & Guesswork</h3>
+                                <p class="text-slate-600 leading-relaxed mb-4">Historically, LLMs function as highly advanced autocomplete engines. When asked a question, they predict the next best word based on training data. If they lack factual context, they confidently fabricate answers—a phenomenon known as <strong>Hallucination</strong>.</p>
+                                <div class="bg-red-50 text-red-800 px-4 py-3 rounded-lg text-sm border border-red-100 flex items-center gap-3">
+                                    <span class="text-lg">⚠️</span> Result: Unreliable for enterprise tasks like insurance underwriting.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="content-react" class="w-full hidden">
+                        <div class="flex items-start gap-6">
+                            <div class="text-5xl opacity-80">🧠</div>
+                            <div class="w-full">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Reason + Act (ReAct)</h3>
+                                <p class="text-slate-600 leading-relaxed mb-6">ReAct forces the AI into a strict, deterministic cognitive loop, granting it the ability to look up hard facts before responding.</p>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                        <div class="font-bold text-amber-500 mb-1">1. Thought</div>
+                                        <div class="text-sm text-slate-600">The AI writes down its internal monologue, breaking down the request to plan its next move.</div>
+                                    </div>
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                        <div class="font-bold text-amber-500 mb-1">2. Action</div>
+                                        <div class="text-sm text-slate-600">The AI triggers an external "Tool" (e.g., API, SQL query, Vision model) instead of guessing.</div>
+                                    </div>
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                        <div class="font-bold text-amber-500 mb-1">3. Observation</div>
+                                        <div class="text-sm text-slate-600">The AI reads the raw, factual data returned by the Tool to ground its knowledge.</div>
+                                    </div>
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                        <div class="font-bold text-amber-500 mb-1">4. Repeat/Resolve</div>
+                                        <div class="text-sm text-slate-600">If it has enough data, it answers. If not, it loops back to step 1.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulation" class="max-w-4xl mx-auto px-6 py-12">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">The ReAct Loop in Action</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Explore how Project Zeus processes a pre-insurance inspection request using the Thought-Action-Observation cycle.</p>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl shadow-xl p-6 md:p-10 font-mono text-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-amber-500"></div>
+                
+                <div id="simulation-container" class="space-y-6 mb-8 min-h-[300px]">
+                </div>
+
+                <div class="flex justify-center mt-8 pt-6 border-t border-slate-800">
+                    <button id="sim-next-btn" class="bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 rounded-lg font-sans font-semibold transition-all transform active:scale-95 flex items-center gap-2">
+                        Execute Next Step <span>▶</span>
+                    </button>
+                    <button id="sim-reset-btn" class="hidden text-slate-400 hover:text-white px-8 py-3 rounded-lg font-sans font-semibold transition-all ml-4">
+                        Reset Simulation
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="ecosystem" class="max-w-6xl mx-auto px-6 py-12">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">The Infrastructure: LangChain Ecosystem</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Building a ReAct loop from scratch is complex. The LangChain Ecosystem provides the exact abstractions needed to do this cleanly at an enterprise scale.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-4">
+                    <button class="eco-btn w-full text-left p-5 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 transition-all active-eco-card" data-target="langchain">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">🔗</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800">LangChain</h4>
+                                <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">The Foundation</div>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button class="eco-btn w-full text-left p-5 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 transition-all" data-target="langgraph">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">🔀</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800">LangGraph</h4>
+                                <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">The Orchestrator</div>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="eco-btn w-full text-left p-5 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 transition-all" data-target="langflow">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">🖱️</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800">LangFlow</h4>
+                                <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">The Blueprint</div>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="eco-btn w-full text-left p-5 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 transition-all" data-target="langsmith">
+                        <div class="flex items-center gap-4">
+                            <span class="text-2xl">🔬</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800">LangSmith</h4>
+                                <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">The Control Room</div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12 flex flex-col justify-center min-h-[400px]">
+                    <div id="eco-detail-langchain" class="eco-detail block fade-in">
+                        <div class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">The Foundation</div>
+                        <h3 class="text-3xl font-bold text-slate-800 mb-6">LangChain</h3>
+                        <p class="text-slate-600 text-lg mb-8 leading-relaxed">The core library that acts as the glue for the entire system, providing the basic building blocks for AI interactions.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">📝</span>
+                                <div><strong class="text-slate-800">Prompts:</strong> Standardized templates that instruct the AI to behave in the ReAct format.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">🛠️</span>
+                                <div><strong class="text-slate-800">Tools:</strong> Wrappers that convert standard Python functions (like checking a database or calling a Vision API) into a format the LLM can understand and trigger autonomously.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">💾</span>
+                                <div><strong class="text-slate-800">Memory:</strong> Modules that keep track of the conversation history so the AI retains context over multiple interactions.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="eco-detail-langgraph" class="eco-detail hidden fade-in">
+                        <div class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">The Orchestrator</div>
+                        <h3 class="text-3xl font-bold text-slate-800 mb-6">LangGraph</h3>
+                        <p class="text-slate-600 text-lg mb-8 leading-relaxed">While LangChain handles A-to-B tasks, the ReAct framework requires Loops and Conditional Logic. LangGraph handles this by treating the application as a state machine.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">📦</span>
+                                <div><strong class="text-slate-800">State:</strong> A globally shared dictionary/object keeping track of data (e.g., car_model, damage_status) throughout the workflow.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">⚙️</span>
+                                <div><strong class="text-slate-800">Nodes:</strong> The actual Agents or Tools performing the work.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">🔀</span>
+                                <div><strong class="text-slate-800">Conditional Edges:</strong> The routing logic. (e.g., IF damage_status: true, THEN route to Human_Review. ELSE route to Quote_Node).</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="eco-detail-langflow" class="eco-detail hidden fade-in">
+                        <div class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">The Blueprint</div>
+                        <h3 class="text-3xl font-bold text-slate-800 mb-6">LangFlow</h3>
+                        <p class="text-slate-600 text-lg mb-8 leading-relaxed">Writing LangGraph code can get complex. LangFlow provides a visual, drag-and-drop interface for structural planning.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">🚀</span>
+                                <div><strong class="text-slate-800">Rapid Prototyping:</strong> Visually drag a "Prompt" box, connect it to an "LLM", and attach a "Database Tool".</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">🤝</span>
+                                <div><strong class="text-slate-800">Collaboration:</strong> Allows product managers and developers to visually design and test the AI architecture before committing to production code.</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="eco-detail-langsmith" class="eco-detail hidden fade-in">
+                        <div class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">The Control Room</div>
+                        <h3 class="text-3xl font-bold text-slate-800 mb-6">LangSmith</h3>
+                        <p class="text-slate-600 text-lg mb-8 leading-relaxed">Because ReAct agents think and loop autonomously, they operate as "black boxes." LangSmith provides essential visibility.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">🔍</span>
+                                <div><strong class="text-slate-800">Deep Tracing:</strong> Logs every single step of the ReAct loop. See exactly what the AI "thought" and the exact API payload sent.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">⏱️</span>
+                                <div><strong class="text-slate-800">Observability:</strong> Monitor execution time (latency) and exact token costs for operational efficiency.</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-amber-500 mt-1">🛡️</span>
+                                <div><strong class="text-slate-800">Quality Assurance:</strong> Essential for debugging, evaluating performance, and running unit tests before going live.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="max-w-6xl mx-auto px-6 py-12">
+            <div class="bg-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+                <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 z-0"></div>
+                <div class="relative z-10 p-8 md:p-14 text-white">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold text-white mb-6">Executive Summary: System Impact</h2>
+                            <p class="text-slate-300 text-lg mb-8 leading-relaxed">By enforcing the ReAct cognitive rulebook and utilizing the LangGraph workflow engine, Project Zeus eliminates hallucinations and ensures strict adherence to business rules (e.g., rejecting damaged cars). The chart demonstrates the theoretical capability shift.</p>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-slate-700/50 p-4 rounded-xl backdrop-blur-sm border border-slate-600/50 flex items-center gap-4">
+                                    <div class="text-3xl">🛡️</div>
+                                    <div>
+                                        <div class="text-sm text-slate-400">Reliability Shift</div>
+                                        <div class="font-bold">Guaranteed Fact-Checking via Tools</div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-700/50 p-4 rounded-xl backdrop-blur-sm border border-slate-600/50 flex items-center gap-4">
+                                    <div class="text-3xl">⚡</div>
+                                    <div>
+                                        <div class="text-sm text-slate-400">Execution Shift</div>
+                                        <div class="font-bold">Autonomous Zero-Touch Underwriting</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-6 backdrop-blur-md border border-white/10">
+                            <div class="chart-container">
+                                <canvas id="impactChart"></canvas>
+                            </div>
+                            <p class="text-center text-xs text-slate-400 mt-4">Capability Comparison: Standard Autocomplete LLM vs. ReAct + LangChain Architecture</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 py-8 text-center border-t border-slate-800">
+        <p class="text-slate-500 text-sm">Project Zeus Architecture Guide &middot; Intelligent Agents Framework</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const tabLlm = document.getElementById('tab-llm');
+            const tabReact = document.getElementById('tab-react');
+            const contentLlm = document.getElementById('content-llm');
+            const contentReact = document.getElementById('content-react');
+
+            tabLlm.addEventListener('click', () => {
+                tabLlm.classList.replace('inactive-tab', 'active-tab');
+                tabReact.classList.replace('active-tab', 'inactive-tab');
+                contentLlm.classList.remove('hidden');
+                contentLlm.classList.add('fade-in');
+                contentReact.classList.add('hidden');
+                contentReact.classList.remove('fade-in');
+            });
+
+            tabReact.addEventListener('click', () => {
+                tabReact.classList.replace('inactive-tab', 'active-tab');
+                tabLlm.classList.replace('active-tab', 'inactive-tab');
+                contentReact.classList.remove('hidden');
+                contentReact.classList.add('fade-in');
+                contentLlm.classList.add('hidden');
+                contentLlm.classList.remove('fade-in');
+            });
+
+            const ecoBtns = document.querySelectorAll('.eco-btn');
+            const ecoDetails = document.querySelectorAll('.eco-detail');
+
+            ecoBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    ecoBtns.forEach(b => b.classList.remove('active-eco-card'));
+                    
+                    btn.classList.add('active-eco-card');
+                    
+                    const targetId = `eco-detail-${btn.dataset.target}`;
+                    ecoDetails.forEach(detail => {
+                        if (detail.id === targetId) {
+                            detail.classList.remove('hidden');
+                            detail.classList.add('fade-in');
+                        } else {
+                            detail.classList.add('hidden');
+                            detail.classList.remove('fade-in');
+                        }
+                    });
+                });
+            });
+
+            const simData = [
+                { type: 'user', icon: '👤', text: 'User Input: "I want to insure this Civic RS 2024. Here are the photos."' },
+                { type: 'thought', icon: '🧠', text: 'Thought 1: "I need to check if this car has any existing damage before I can issue a quote. I will use the Vision_Inspection_Tool."' },
+                { type: 'action', icon: '🛠️', text: 'Action 1: [Calls Vision_Inspection_Tool with image URLs]' },
+                { type: 'observation', icon: '👁️', text: 'Observation 1: [Tool returns: "Status: Pristine. No scratches or dents detected."]' },
+                { type: 'thought', icon: '🧠', text: 'Thought 2: "The car is in perfect condition, qualifying for a new policy. I need to calculate the premium for a Civic RS 2024 using the Pricing_Database_Tool."' },
+                { type: 'action', icon: '🛠️', text: 'Action 2: [Calls Pricing_Database_Tool with "Civic RS 2024"]' },
+                { type: 'observation', icon: '👁️', text: 'Observation 2: [Tool returns: "Base Premium: ฿24,000/year"]' },
+                { type: 'thought', icon: '🧠', text: 'Thought 3: "I have all the information needed. I will now format the final quotation."' },
+                { type: 'output', icon: '✅', text: 'Final Output: "Great news! Your car is approved. Your premium is ฿24,000/year..."' }
+            ];
+
+            const simContainer = document.getElementById('simulation-container');
+            const nextBtn = document.getElementById('sim-next-btn');
+            const resetBtn = document.getElementById('sim-reset-btn');
+            let currentStep = 0;
+
+            function getColorClasses(type) {
+                switch(type) {
+                    case 'user': return 'text-slate-300 border-slate-700';
+                    case 'thought': return 'text-amber-400 border-amber-900/50 bg-amber-900/10';
+                    case 'action': return 'text-blue-400 border-blue-900/50 bg-blue-900/10';
+                    case 'observation': return 'text-emerald-400 border-emerald-900/50 bg-emerald-900/10';
+                    case 'output': return 'text-white border-green-500 bg-green-900/30 font-bold';
+                    default: return 'text-slate-400 border-slate-700';
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentStep < simData.length) {
+                    const step = simData[currentStep];
+                    const el = document.createElement('div');
+                    el.className = `flex gap-4 p-4 rounded-lg border fade-in ${getColorClasses(step.type)}`;
+                    
+                    el.innerHTML = `
+                        <div class="text-xl flex-shrink-0">${step.icon}</div>
+                        <div class="leading-relaxed">${step.text}</div>
+                    `;
+                    
+                    simContainer.appendChild(el);
+                    
+                    if (currentStep === simData.length - 1) {
+                        nextBtn.classList.add('hidden');
+                        resetBtn.classList.remove('hidden');
+                    }
+                    
+                    currentStep++;
+                }
+            });
+
+            resetBtn.addEventListener('click', () => {
+                simContainer.innerHTML = '';
+                currentStep = 0;
+                resetBtn.classList.add('hidden');
+                nextBtn.classList.remove('hidden');
+            });
+
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            
+            Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Factual Accuracy', 
+                        'External Tool Integration', 
+                        'Multi-step Reasoning', 
+                        'Workflow State Memory', 
+                        'Execution Observability'
+                    ],
+                    datasets: [{
+                        label: 'Standard LLM',
+                        data: [40, 10, 30, 20, 10],
+                        backgroundColor: 'rgba(100, 116, 139, 0.2)',
+                        borderColor: 'rgba(100, 116, 139, 1)',
+                        pointBackgroundColor: 'rgba(100, 116, 139, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'ReAct + LangChain System',
+                        data: [95, 100, 90, 100, 95],
+                        backgroundColor: 'rgba(245, 158, 11, 0.4)',
+                        borderColor: 'rgba(245, 158, 11, 1)',
+                        pointBackgroundColor: 'rgba(245, 158, 11, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: {
+                                font: { size: 11, weight: '500' },
+                                callback: function(word) {
+                                    if (word.length > 16) {
+                                        return word.match(/.{1,16}(\s|$)/g);
+                                    }
+                                    return word;
+                                }
+                            },
+                            ticks: {
+                                display: false,
+                                min: 0,
+                                max: 100,
+                                stepSize: 20
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: { size: 13 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.dataset.label}: ${context.raw}/100`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
