@@ -393,7 +393,7 @@ FASTAPI_URL=http://localhost:8000
 
 ```bash
 cd zeus-ai-service
-pip install -r requirements.txt
+py -m pip install -r requirements.txt
 
 # Embed all new documents (default — skips already-embedded)
 python ingest_embeddings.py
